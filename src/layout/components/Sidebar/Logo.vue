@@ -26,7 +26,7 @@ export default {
   },
   data () {
     return {
-      title: '综合运营管理系统'
+      title: '党组织信息公示管理后台'
     }
   },
   computed: {
@@ -75,7 +75,7 @@ export default {
       color: var(--color-primary);
       font-weight: 500;
       line-height: 50px;
-      font-size: 18px;
+      font-size: 16px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }

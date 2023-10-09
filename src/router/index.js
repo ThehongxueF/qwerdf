@@ -6,8 +6,11 @@ Vue.use(Router)
 
 /* Router Modules */
 import databoardRoutes from './modules/data-board'
-// import systemRoutes from './modules/system'
-import achievementRoutes from './modules/achievement'
+import unitRoutes from './modules/unit'
+import branchRoutes from './modules/branch'
+import userRoutes from './modules/user'
+import contentRoutes from './modules/content'
+// import achievementRoutes from './modules/achievement'
 
 /**
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
@@ -120,8 +123,12 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   databoardRoutes,
+  unitRoutes,
+  branchRoutes,
+  userRoutes,
+  contentRoutes,
   // systemRoutes,
-  achievementRoutes,
+  // achievementRoutes,
   { path: '*', redirect: '/404', hidden: true }
 ]
 

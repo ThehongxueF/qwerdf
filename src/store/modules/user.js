@@ -97,8 +97,8 @@ const actions = {
         if (authorizationModule && authorizationModule.authorizationModules) { // 授权模块JSON string
           authModules = authorizationModule.authorizationModules.split(',')
         }
-        // 根据authModules来控制模块，此处先把数据看板模块默认显示
-        authModules.push('Databoard')
+        // 根据authModules来控制模块，此处先把各模块默认显示
+        authModules = ['Databoard', 'Unit', 'Branch', 'User', 'Content', 'Achievement']
         commit('SET_AUTH_MODULES', authModules)
         resolve(authModules)
       }).catch(error => {

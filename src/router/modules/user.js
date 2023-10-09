@@ -11,27 +11,16 @@ export default {
   redirect: { name: 'Users' },
   children: [
     {
-      path: '/users',
-      name: 'Users',
-      hidden: true,
-      component: () => import('@/views/users/index'),
-      meta: { title: '用户列表', icon: 'users', noCache: false, breadcrumb: false }
+      path: 'party-members',
+      name: 'User.PartyMembers',
+      component: () => import('@/views/user/party-member'),
+      meta: { title: '党员管理', noCache: true }
     },
     {
-      path: 'add',
-      name: 'Users.Add',
-      hidden: true,
-      meta: { title: '新增用户' },
-      props: true,
-      component: () => import('@/views/users/add/index')
-    },
-    {
-      path: ':id',
-      name: 'Users.Detail',
-      hidden: true,
-      meta: { title: '用户详情' },
-      props: true,
-      component: () => import('@/views/users/detail/index')
+      path: 'developing-partyMembers',
+      name: 'User.DevelopingPartyMembers',
+      component: () => import('@/views/user/developing-partyMembers'),
+      meta: { title: '发展中党员管理', noCache: true }
     }
   ]
 }
