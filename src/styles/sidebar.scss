@@ -72,9 +72,9 @@
       }
     }
     .is-active {
-      background-image: linear-gradient( to right, #FFFFFF, #E5E8FF) !important;
+      background-image: linear-gradient( to right, #FFFFFF, #fadad6) !important;
       font-weight: 600;
-      border-right: 3px solid #1E65F0;
+      border-right: 3px solid #dd5543;
     }
     .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
