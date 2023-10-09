@@ -1,0 +1,78 @@
+// base color
+$blue: #324157;
+$light-blue: #3a71a8;
+$red: #c03639;
+$pink: #e65d6e;
+$green: #30b08f;
+$tiffany: #4ab7bd;
+$yellow: #fec171;
+$panGreen: #30b08f;
+$text-heavy: #333;
+$text-medium: #666;
+$text-light: #999;
+$color-title: #1890ff;
+$color-primary: #1e86ed;
+
+// sidebar
+// $menuText: $text-medium;
+$menuText: #cccccc;
+// $menuActiveText: var(--color-primary);
+// $menuActiveText: var(--color-primary);
+$menuActiveText: #333333;
+// $subMenuActiveText: var(--color-primary); // https://github.com/ElemeFE/element/issues/12951
+$subMenuActiveText: #333333;
+
+
+$menuBg: #ffffff;
+$menuHover: #ffffff;
+
+$subMenuBg: #ffffff;
+$subMenuHover: #ffffff;
+
+$sideBarWidth: 210px;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+}
+/* 定义初始颜色
+------------------------------- */
+$--color-default: #016BEA !default;
+$--color-whites: #ffffff !default;
+$--color-blacks: #000000 !default;
+$--color-bg: #f8f8f8 !default;
+$--bg-menuBar: #ffffff;
+$--bg-menuBarColor: #333333;
+$--bg-topBar: #ffffff;
+$--bg-topBarColor: #606266;
+$--bg-columnsMenuBar: #545c64;
+$--bg-columnsMenuBarColor: #e6e6e6;
+
+ /* 定义主色
+------------------------------- */
+// $--color-primary: #7a0b24 !default;
+$--color-primary: #1E65F0  !default;
+
+/* 赋值给:root
+------------------------------- */
+:root {
+	--color-default: #{$--color-default};
+	--color-whites: #{$--color-whites};
+	--color-blacks: #{$--color-blacks};
+	--color-bg: #{$--color-bg};
+	--bg-menuBar: #{$--bg-menuBar};
+	--bg-menuBarColor: #{$--bg-menuBarColor};
+	--bg-topBar: #{$--bg-topBar};
+	--bg-topBarColor: #{$--bg-topBarColor};
+	--bg-columnsMenuBar: #{$--bg-columnsMenuBar};
+	--bg-columnsMenuBarColor: #{$--bg-columnsMenuBarColor};
+	--color-primary: #{$--color-primary};
+}

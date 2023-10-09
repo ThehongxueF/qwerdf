@@ -1,0 +1,6 @@
+dist
+deployment.sh
+*.md
+.git
+v8-compile*
+node_modules

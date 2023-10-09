@@ -1,0 +1,42 @@
+@import "./variables.scss";
+
+.box-card {
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .flex-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .flex-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    line-height: 32px;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    margin: 5px 0 10px;
+    color: $text-heavy;
+  }
+  .info {
+    font-size: 14px;
+    color: $text-medium;
+    &-item {
+      margin-bottom: 4px;
+    }
+    .text-right {
+      text-align: right;
+    }
+  }
+  .date {
+    font-size: 14px;
+    color: $text-light;
+  }
+}
