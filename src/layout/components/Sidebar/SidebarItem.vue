@@ -104,7 +104,6 @@ export default {
   },
   created () {
     this.activeMenu = this.$route.name
-    console.log('this.activeMenu', this.activeMenu)
   },
   methods: {
     hasOneShowingChild (children = [], parent) {

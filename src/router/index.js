@@ -90,27 +90,28 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
+  },
+  {
+    path: '/',
+    component: Layout,
+    hidden: true,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/home/index'),
+        name: 'Home',
+        meta: { title: '工作台', icon: 'dashboard', hidden: true, affix: true }
+      },
+      {
+        path: 'personal',
+        component: () => import('@/views/personal/index'),
+        name: 'Personal',
+        hidden: true,
+        meta: { title: '个人信息', hidden: true }
+      }
+    ]
   }
-  // {
-  //   path: '/dashboard',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   children: [
-  //     {
-  //       path: 'dashboard',
-  //       component: () => import('@/views/home/index'),
-  //       name: 'Home',
-  //       meta: { title: '工作台', icon: 'dashboard', hidden: true, affix: true }
-  //     },
-  //     {
-  //       path: 'personal',
-  //       component: () => import('@/views/personal/index'),
-  //       name: 'Personal',
-  //       hidden: true,
-  //       meta: { title: '个人信息', hidden: true }
-  //     }
-  //   ]
-  // }
 ]
 
 /**

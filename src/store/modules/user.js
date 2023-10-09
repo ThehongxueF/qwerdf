@@ -99,7 +99,6 @@ const actions = {
         }
         // 根据authModules来控制模块，此处先把数据看板模块默认显示
         authModules.push('Databoard')
-        console.log('authModules', authModules)
         commit('SET_AUTH_MODULES', authModules)
         resolve(authModules)
       }).catch(error => {

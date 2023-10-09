@@ -93,7 +93,9 @@ export default {
       return tags
     },
     initTags () {
-      const affixTags = this.affixTags = this.filterAffixTags(this.routes)
+      let affixTags = this.affixTags = this.filterAffixTags(this.routes)
+      // 去除工作台的标签
+      affixTags = affixTags.filter(item => item.name !== 'Home')
       for (const tag of affixTags) {
         // Must have tag name
         if (tag.name) {

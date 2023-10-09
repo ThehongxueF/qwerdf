@@ -4,9 +4,9 @@
     <div class="login-container-center">
       <div class="image-content">
         <div class="image-content-title">
-          <img src="@/assets/login/logo.png" alt="">
+          <!-- <img src="@/assets/login/logo.png" alt=""> -->
         </div>
-        <div class="image-content-content">
+        <!-- <div class="image-content-content">
           欢迎来到
           <div class="image-content-welcome">
             Welcome to
@@ -15,7 +15,7 @@
             <div>中国工程院院士专家成果转化中心</div>
             <div style="color:#ff7800">技术转移综合管理系统</div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="form-content">
         <div class="login-content" :class="{ 'login-content-mobile': tabsActiveName === 'mobile' }">
