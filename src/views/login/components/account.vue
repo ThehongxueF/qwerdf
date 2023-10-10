@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginForm" :model="ruleForm" :rules="rules" size="large" class="login-content-form" label-position="top">
-    <el-form-item prop="account" label="用户名/手机号/邮箱">
-      <el-input v-model="ruleForm.account" type="text" clearable autocomplete="off">
+    <el-form-item prop="account" label="用户名">
+      <el-input v-model="ruleForm.account" placeholder="请输入用户名" type="text" clearable autocomplete="off">
         <!-- <template #prefix>
           <i class="el-input__icon el-icon-user" />
         </template> -->
@@ -12,10 +12,11 @@
         v-model="ruleForm.password"
         type="password"
         autocomplete="off"
+        placeholder="请输入密码"
         show-password
       />
     </el-form-item>
-    <el-form-item prop="identifyCode" label="验证码">
+    <el-form-item prop="identifyCode">
       <el-row :gutter="15">
         <el-col :span="16">
           <el-input v-model="ruleForm.identifyCode" autocomplete="off" />
@@ -58,7 +59,7 @@ export default {
   data () {
     const validateAccount = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入账号/手机号/邮箱'))
+        callback(new Error('请输入用户名'))
       } else {
         callback()
       }
@@ -220,7 +221,7 @@ export default {
 	margin-top: 20px;
   ::v-deep {
         .el-form-item__label {
-          color: rgba(255, 255, 255, 0.69);
+          color: #aaaaaa;
           line-height: 10px;
           font-size: 12px;
         }
@@ -229,9 +230,9 @@ export default {
           padding: 0px 10px;
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+          border: 1px solid #ebebeb;
           border-radius: none;
-          color: #ffffff;
+          color: #aaaaaa;
           // -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.16) inset;
           // -webkit-text-fill-color: #ffffff !important;
         }
