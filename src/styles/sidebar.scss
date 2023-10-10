@@ -67,14 +67,15 @@
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
+      color: #333333 !important;
       &:hover {
         background-color: $menuHover !important;
       }
     }
     .is-active {
-      background-image: linear-gradient( to right, #FFFFFF, #fadad6) !important;
+      background-image: linear-gradient( to right, #E7EAF8, #F7F9FB) !important;
       font-weight: 600;
-      border-right: 3px solid #dd5543;
+      // border-right: 3px solid #dd5543;
     }
     .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
@@ -82,6 +83,7 @@
 
     & .nest-menu .el-submenu > .el-submenu__title,
     & .el-submenu .el-menu-item {
+      color: #333333 !important;
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
 
@@ -115,7 +117,6 @@
 
     .el-submenu {
       overflow: hidden;
-
       & > .el-submenu__title {
         padding: 0 !important;
 

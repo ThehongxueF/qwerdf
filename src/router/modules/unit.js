@@ -7,7 +7,7 @@ export default {
   path: '/units',
   component: Layout,
   name: 'Unit',
-  meta: { title: '单位管理', icon: 'skill' },
+  meta: { title: '单位管理', icon: 'unit' },
   redirect: { name: 'Units' },
   children: [
     {

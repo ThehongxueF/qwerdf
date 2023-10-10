@@ -7,7 +7,7 @@ export default {
   path: '/users',
   component: Layout,
   name: 'User',
-  meta: { title: '用户管理', icon: 'users', noCache: false },
+  meta: { title: '用户管理', icon: 'branch', noCache: false },
   redirect: { name: 'Users' },
   children: [
     {

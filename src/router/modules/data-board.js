@@ -7,7 +7,7 @@ export default {
   path: '/databoard',
   component: Layout,
   name: 'Databoard',
-  meta: { title: '数据看板', icon: 'dashboard' },
+  meta: { title: '数据看板', icon: 'databoard' },
   redirect: { name: 'Databoard' },
   children: [
     {

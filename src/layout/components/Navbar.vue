@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger v-if="false" id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <breadcrumb v-if="false" id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
@@ -10,7 +10,7 @@
           中国工程院院士专家成果展示与转化中心
         </div> -->
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <screenfull v-if="false" id="screenfull" class="right-menu-item hover-effect" />
 
       </template>
 
@@ -156,7 +156,9 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  // background: #fff;
+  background: url('~@/assets/common/header-bg.png') center no-repeat;
+  background-size: cover;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
@@ -231,6 +233,7 @@ export default {
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;
+          color: #ffffff;
           right: -20px;
           top: 10px;
           font-size: 12px;

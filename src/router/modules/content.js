@@ -7,7 +7,7 @@ export default {
   path: '/contents',
   component: Layout,
   name: 'Content',
-  meta: { title: '内容管理', icon: 'sku', noCache: false },
+  meta: { title: '内容管理', icon: 'branch', noCache: false },
   redirect: { name: 'Contents' },
   children: [
     {

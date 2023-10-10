@@ -7,7 +7,7 @@ export default {
   path: '/branchs',
   component: Layout,
   name: 'Branch',
-  meta: { title: '支部管理', icon: 'skill' },
+  meta: { title: '支部管理', icon: 'branch' },
   redirect: { name: 'Branchs' },
   children: [
     {

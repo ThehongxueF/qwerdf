@@ -50,7 +50,7 @@ export default {
       img {
         width: 400px;
         position: absolute;
-        top: -132px;
+        top: -135px;
         left: -63px;
       }
     }
