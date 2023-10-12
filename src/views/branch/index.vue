@@ -45,7 +45,7 @@
           {{ row.unit && row.unit.title }}
         </template>
         <template #action="{ row }">
-          <router-link :to="{ name: 'Units.Detail' , params: { id: row.id } }">
+          <router-link :to="{ name: 'Branchs.Detail' , params: { id: row.id } }">
             <el-link icon="el-icon-view">查看</el-link>
           </router-link>
         </template>
