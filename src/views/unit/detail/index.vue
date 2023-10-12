@@ -104,7 +104,7 @@
     </el-row>
     <el-row :gutter="10" style="margin-top: 20px">
       <el-col :lg="{ span: 24 }" :xl="{ span: 24 }">
-        <el-card shadow="hover" class="mb10" style="height: 800px; ">
+        <el-card shadow="hover" class="mb10" style="height: 300px; ">
           <div class="flex-space-between">
             <h3>下属支部</h3>
             <el-button
