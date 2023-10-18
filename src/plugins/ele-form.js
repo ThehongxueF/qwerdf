@@ -8,6 +8,7 @@ import EleFormTreeSelect from 'vue-ele-form-tree-select'
 import EleFormImageUploader from '@/components/EleFormComponents/EleUploadImage/index'
 import EleFormFroalaEditor from '@/components/EleFormComponents/FroalaEditor'
 import AreaCascaderWithSep from '@/components/EleFormComponents/AreaCascaderWithSep'
+import EleFormVideoUploader from 'vue-ele-form-video-uploader'
 import SvgIcon from '@/components/SvgIcon/basis.vue'// svg component
 
 import { uploadUrl } from '@/data/options'
@@ -24,7 +25,8 @@ Vue.component('dynamic', EleFormDynamic)
 Vue.component('froala-editor', EleFormFroalaEditor)
 // 注册 tree-select 组件
 Vue.component('tree-select', EleFormTreeSelect)
-
+// 注册upload—video 组件
+Vue.component('video-uploader', EleFormVideoUploader)
 Vue.component('area-cascader-with-sep', AreaCascaderWithSep)
 
 // 注册 vue-ele-form

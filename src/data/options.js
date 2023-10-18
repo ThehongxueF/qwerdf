@@ -99,6 +99,7 @@ export const uploadHeaders = {
   'X-College-Domain': Local.get('X-College-Domain')
 }
 export const fileType = ['png', 'jpeg', 'jpg', 'zip', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pdf', 'mp4', 'mkv', 'm2v', 'mp3', 'wav', 'wmv']
+export const videoType = ['mp4', 'mkv', 'm2v', 'mp3', 'wav', 'wmv']
 
 // 图片资源上传
 export const imgUploadOptions = {
@@ -114,6 +115,17 @@ export const imgUploadOptions = {
 export const fileUploadOptions = {
   action: uploadUrl,
   fileType: fileType,
+  headers: uploadHeaders,
+  multiple: true,
+  responseFn (response, file) {
+    return response.url
+  }
+}
+
+// 视频上传
+export const videoUploadOptions = {
+  action: uploadUrl,
+  fileType: videoType,
   headers: uploadHeaders,
   multiple: true,
   responseFn (response, file) {

@@ -10536,6 +10536,13 @@ vue-ele-form-upload-file@^0.0.7:
   dependencies:
     vue-ele-upload-file "^0.0.7"
 
+vue-ele-form-video-uploader@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/vue-ele-form-video-uploader/-/vue-ele-form-video-uploader-0.1.5.tgz#ca9609664ebb8245a4cf6bcfa74b020fb36009a2"
+  integrity sha512-jeJI5LfOp/mNpUXAnzTmHwQfPaA8rcBYw3NYaDHFV3aNtz9P2jLSdcrSikEaL5BPKCpxNahgxp+bqEdd3RMOCA==
+  dependencies:
+    vue-ele-upload-video "^2.0.6"
+
 vue-ele-form@^0.8.58:
   version "0.8.58"
   resolved "https://registry.yarnpkg.com/vue-ele-form/-/vue-ele-form-0.8.58.tgz#b8b95aeda83e6ac77f2b096c4a7ed2d3bd53707c"
@@ -10567,6 +10574,13 @@ vue-ele-upload-image@^2.0.11:
     vue-ele-gallery "^2.1.7"
     vue-image-crop-upload "^2.5.0"
 
+vue-ele-upload-video@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-ele-upload-video/-/vue-ele-upload-video-2.0.6.tgz#2a88ee7328d60872aef34ec5c6afaca83b7970ac"
+  integrity sha512-9YMtYDOiLhMg4RA98jmo3rHptG+QF4+PFT+zwJjN2n/YACIMztLKOAD5MzesPGVHpiV57RYpAcl5Ixm3E1xLJw==
+  dependencies:
+    vue-hover-mask "^1.0.0"
+
 vue-eslint-parser@^7.0.0:
   version "7.6.0"
   resolved "https://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-7.6.0.tgz?cache=0&sync_timestamp=1614679548045&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-eslint-parser%2Fdownload%2Fvue-eslint-parser-7.6.0.tgz#01ea1a2932f581ff244336565d712801f8f72561"
@@ -10593,6 +10607,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-hover-mask@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-hover-mask/-/vue-hover-mask-1.0.0.tgz#c7af27b6486b07c1be2b90919c76deed1756d6ea"
+  integrity sha512-fEhw8GRQkAUCpfclss5Kta+RS628r8cOrd0pc5zInYgFmImVMvLF6LCCnKdmHQy6lqknAgBhLI1Ka+OdEDQQkQ==
 
 vue-image-crop-upload@^2.5.0:
   version "2.5.0"

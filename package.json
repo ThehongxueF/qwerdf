@@ -38,6 +38,7 @@
     "vue-ele-form-image-uploader": "^0.1.5",
     "vue-ele-form-tree-select": "^0.1.1",
     "vue-ele-form-upload-file": "^0.0.7",
+    "vue-ele-form-video-uploader": "^0.1.5",
     "vue-froala-wysiwyg": "^4.0.8",
     "vue-ls": "^4.0.0",
     "vue-native-websocket": "^2.0.15",
