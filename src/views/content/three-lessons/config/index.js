@@ -1,4 +1,4 @@
-import { videoUploadOptions, imgUploadOptions } from '@/data/options'
+import { imgUploadOptions } from '@/data/options'
 import { TOKEN_KEY, COLLEGE_DOMAIN_KEY } from '@/data/constant'
 import { Local } from '@/utils/storage'
 import { getToken } from '@/utils/auth'
@@ -50,13 +50,13 @@ export const tableColumns = [
 ]
 
 export const unitFormDesc = {
-  video: {
-    label: '视频',
-    type: 'video-uploader',
-    attrs: {
-      ...videoUploadOptions,
-      headers
-    }
+  videos: {
+    label: '视频'
+    // type: 'video-uploader',
+    // attrs: {
+    //   ...videoUploadOptions,
+    //   headers
+    // }
   },
   coverUrl: {
     label: '图片',
@@ -64,6 +64,7 @@ export const unitFormDesc = {
     tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
+      multiple: true,
       headers
     }
   },
