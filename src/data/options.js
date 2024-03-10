@@ -93,7 +93,7 @@ export const activityOptions = [
 /**
  * 上传相关
  */
-export const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
+export const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 export const uploadHeaders = {
   'X-Token': Local.get('X-Token'),
   'X-College-Domain': Local.get('X-College-Domain')
@@ -107,7 +107,7 @@ export const imgUploadOptions = {
   headers: uploadHeaders,
   fileSize: 2,
   responseFn (response, file) {
-    return response.url
+    return response.link
   }
 }
 

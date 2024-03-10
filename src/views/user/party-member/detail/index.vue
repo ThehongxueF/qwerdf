@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="pageLoading" class="app-container">
+  <div class="app-container">
     <el-row :gutter="10">
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }" class="mb10">
         <el-card class="base-info" shadow="hover">

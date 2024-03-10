@@ -23,7 +23,7 @@
         </el-col>
         <el-col :md="8" :lg="6" :xl="4" class="mb10">
           <el-select
-            v-model="branch"
+            v-model="departmentId"
             placeholder="请选择支部"
             style="width: 100%;"
             clearable
@@ -31,10 +31,10 @@
             @clear="handleFieldSearch"
           >
             <el-option
-              v-for="(item, index) in branchOptions"
+              v-for="(item, index) in departments"
               :key="index"
-              :label="item"
-              :value="item"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-col>
@@ -59,15 +59,15 @@
         @field-search="fieldSearch"
       >
         <template #action="{}">
-          <el-link icon="el-icon-view" @click="drawerFormVisible = true">编辑</el-link>
+          <el-link icon="el-icon-view" @click="editLesson">编辑</el-link>
         </template>
       </common-table>
       <div class="page-container">
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
@@ -120,7 +120,8 @@
 import { Local } from '@/utils/storage'
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, unitFormDesc } from './config'
-const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
+import { Conferences, Departments } from '@/api'
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
   'X-Token': Local.get('X-Token').value,
   'X-College-Domain': Local.get('X-College-Domain')
@@ -137,40 +138,53 @@ export default {
       listLoading: false,
       drawerFormVisible: false,
       list: [],
-      total: 2,
-      formData: {
-        id: 3
-      },
-      branchOptions: ['支部一', '支部二', '支部三'],
-      branch: '支部一',
+      total: 0,
+      formData: {},
+      departments: [],
+      departmentId: '',
+      branch: '',
       uploadedVideos: []
     }
   },
   mounted () {
     this.getList()
+    this.getDepartmentsList()
   },
   methods: {
-    getList () {
-      this.list = [
-        {
-          id: '1',
-          title: '课程名一',
-          type: '党员大会',
-          image: '无',
-          branch: '支部一'
-        },
-        {
-          id: '2',
-          title: '课程名二',
-          type: '党支部委员会',
-          image: '无',
-          branch: '支部二'
-        }
-      ]
+    async getList () {
+      try {
+        const { conferences, count } = await Conferences.getConferences({ ...this.listQuery })
+        this.list = conferences
+        this.total = count
+      } catch ({ message = '获取三会一课列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
     },
-    handleUpdate () {
-      this.list.push(this.formData)
+    async getDepartmentsList () {
+      try {
+        const { departments } = await Departments.getDepartments({ ...this.listQuery })
+        this.departments = departments
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
+    },
+    async handleUpdate () {
       this.drawerFormVisible = false
+      this.formData.departmentId = this.departmentId
+      this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.response.link)
+      try {
+        const params = {
+          conference: this.formData
+        }
+        await Conferences.saveConferences(params)
+      } catch ({ message = '保存三会一课出错' }) {
+        this.getList()
+        this.$message.error(message)
+      } finally {
+        this.getList()
+      }
     },
     handleSuccess (response, file, fileList) {
       this.uploadedVideos = fileList
@@ -191,6 +205,9 @@ export default {
     },
     handleDelete (uid) {
       this.uploadedVideos = this.uploadedVideos.filter(item => item.uid !== uid)
+    },
+    editLesson () {
+      this.drawerFormVisible = true
     }
   }
 }

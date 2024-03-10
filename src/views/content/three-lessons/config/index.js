@@ -3,7 +3,7 @@ import { TOKEN_KEY, COLLEGE_DOMAIN_KEY } from '@/data/constant'
 import { Local } from '@/utils/storage'
 import { getToken } from '@/utils/auth'
 
-const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/attachmentUpload`
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 
 const headers = {
   [TOKEN_KEY]: getToken(),
@@ -21,44 +21,59 @@ const commonColumns = [
 
 export const modelMap = {
   id: 'id',
-  title: '名称',
-  type: '类型',
-  image: '缩略图',
+  name: '会议名称',
+  conferenceType: '类型',
+  pics: '缩略图',
   branch: '所属支部',
-  video: '视频'
+  videos: '视频',
+  files: '文件'
 }
 
 export const tableColumns = [
   {
-    prop: 'title',
-    label: modelMap['title'],
+    prop: 'name',
+    label: modelMap['name'],
     align: 'left'
   },
   {
-    prop: 'type',
-    label: modelMap['type']
+    prop: 'conferenceType',
+    label: modelMap['conferenceType']
   },
-  {
-    prop: 'image',
-    label: modelMap['image']
-  },
-  {
-    prop: 'branch',
-    label: modelMap['branch']
-  },
+  // {
+  //   prop: 'pics',
+  //   label: modelMap['pics']
+  // },
+  // {
+  //   prop: 'branch',
+  //   label: modelMap['branch']
+  // },
   ...commonColumns
 ]
 
 export const unitFormDesc = {
+  name: {
+    label: modelMap.name,
+    type: 'input',
+    required: true,
+    rules: [
+      { max: 50, message: '会议名称不得超过50个字符', trigger: 'change' }
+    ]
+  },
+  conferenceType: {
+    label: modelMap.conferenceType,
+    type: 'select',
+    required: true,
+    options: ['党员大会', '党支部委员会', '党小组会议', '党课']
+  },
   videos: {
-    label: '视频'
+    label: modelMap.videos
     // type: 'video-uploader',
     // attrs: {
     //   ...videoUploadOptions,
     //   headers
     // }
   },
-  coverUrl: {
+  pics: {
     label: '图片',
     type: 'image-uploader',
     tip: '建议长宽比例 `1:1`',
@@ -68,7 +83,7 @@ export const unitFormDesc = {
       headers
     }
   },
-  attachmentIds: {
+  files: {
     label: '文件',
     type: 'upload-file',
     valueFormatter (files) {
@@ -90,7 +105,7 @@ export const unitFormDesc = {
       action: uploadUrl,
       isCanDownload: false,
       responseFn (response, file) {
-        return response
+        return response.link
       }
     }
   }

@@ -41,8 +41,8 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
-        <template #unit="{ row }">
-          {{ row.unit && row.unit.title }}
+        <template #organization="{ row }">
+          {{ row.organization && row.organization.name }}
         </template>
         <template #action="{ row }">
           <router-link :to="{ name: 'Branchs.Detail' , params: { id: row.id } }">
@@ -76,6 +76,7 @@
 <script>
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, branchFormDesc } from './config'
+import { Departments } from '@/api'
 
 export default {
   name: 'Units',
@@ -87,35 +88,37 @@ export default {
       listLoading: false,
       drawerFormVisible: false,
       list: [],
-      total: 2,
-      formData: {
-        id: 3
-      }
+      total: 0,
+      formData: {}
     }
   },
   mounted () {
     this.getList()
   },
   methods: {
-    getList () {
-      this.list = [
-        {
-          id: 1,
-          title: '支部一',
-          unit: { id: 1, title: '单位一单位一单位一单位一' },
-          brief: '支部介绍支部介绍支部介绍支部介绍支部介绍支部介绍'
-        },
-        {
-          id: 2,
-          title: '支部二',
-          unit: { id: 2, title: '单位二单位二单位二单位二单位二' },
-          brief: '支部介绍支部介绍支部介绍支部介绍支部介绍支部介绍'
-        }
-      ]
+    async getList () {
+      try {
+        const { departments, count } = await Departments.getDepartments({ ...this.listQuery })
+        this.list = departments
+        this.total = count
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
     },
-    handleUpdate () {
-      this.list.push(this.formData)
+    async handleUpdate () {
       this.drawerFormVisible = false
+      try {
+        const params = {
+          department: this.formData
+        }
+        await Departments.saveDepartments(params)
+      } catch ({ message = '保存组织机构出错' }) {
+        this.getList()
+        this.$message.error(message)
+      } finally {
+        this.getList()
+      }
     }
   }
 }

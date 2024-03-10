@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="pageLoading" class="app-container">
+  <div class="app-container">
     <el-row :gutter="10">
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }" class="mb10">
         <el-card class="base-info" shadow="hover">
@@ -29,10 +29,15 @@
             :label-style="labelStyle"
             :content-style="contentStyle"
           >
-            <el-descriptions-item label="支部名称"> {{ branch.title }} </el-descriptions-item>
-            <el-descriptions-item label="所属单位"> {{ branch.unit.name }} </el-descriptions-item>
-            <el-descriptions-item label="支部介绍"> {{ branch.brief }} </el-descriptions-item>
+            <el-descriptions-item label="支部名称"> {{ department.name }} </el-descriptions-item>
+            <el-descriptions-item label="所属单位"> {{ department.organization && department.organization.name }} </el-descriptions-item>
           </el-descriptions>
+          <el-divider content-position="left">
+            支部介绍
+          </el-divider>
+          <el-card shadow="never">
+            <froala-view v-model="department.introduction" />
+          </el-card>
         </el-card>
       </el-col>
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }">
@@ -140,17 +145,17 @@
               submit-btn-text="保存"
               @request="onCarouselSubmit"
             >
-              <template v-if="formData.carousels && formData.carousels.length" v-slot:orderList>
+              <template v-if="formData.showPics && formData.showPics.length" v-slot:orderList>
                 <!-- content to trigger tooltip here -->
                 <h4>排序：</h4>
                 <el-tooltip content="拖动可排序" placement="top" effect="dark">
                   <draggable
-                    v-model="formData.carousels"
+                    v-model="formData.showPics"
                     class="list-group"
                     tag="ul"
                   >
                     <transition-group type="transition" :name="'flip-list'">
-                      <li v-for="(element) in formData.carousels" :key="element" class="list-group-item one-text-overflow">
+                      <li v-for="(element) in formData.showPics" :key="element" class="list-group-item one-text-overflow">
                         <el-image :src="element" fit="fill" class="thumb" />
                       </li>
                     </transition-group>
@@ -175,10 +180,13 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
+import _ from 'lodash'
 import { branchFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
 import draggable from 'vuedraggable'
 import { carouselFormDesc } from '../config'
+import { Departments } from '@/api'
 
 export default {
   components: { draggable },
@@ -224,17 +232,47 @@ export default {
           id: 7,
           name: '组织架构七'
         }
-      ]
+      ],
+      department: {}
+    }
+  },
+  watch: {
+    department: {
+      deep: true,
+      handler (data) {
+        this.formData = cloneDeep(data)
+        this.formData.organizationId = data.organization && data.organization.id
+      }
     }
   },
   created () {
-    this.formData = this.branch
+    this.getDetail()
   },
   methods: {
-    handleUpdate () {
+    async getDetail () {
+      try {
+        const { department } = await Departments.getDepartment(this.id)
+        this.department = department
+      } catch ({ message = '获取支部详情出错' }) {
+        this.$message.error(message)
+      }
+    },
+    async handleUpdate () {
+      const params = {
+        department: this.formData
+      }
+      try {
+        await Departments.saveDepartments(_.pickBy(params, (value) => value))
+        this.getDetail()
+      } catch ({ message = '更新支部出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      } finally {
+        this.drawerFormVisible = false
+      }
     },
     async onCarouselSubmit (data) {
-      console.log(data)
+      await this.handleUpdate()
     }
   }
 }
@@ -245,7 +283,7 @@ export default {
   position: absolute;
   width: 220px;
   right: 100px;
-  top: 50px;
+  top: 40px;
 }
 .base-info {
   border: 1px solid #FFD4A3;

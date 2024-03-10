@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
@@ -9,7 +9,7 @@ import getPageTitle from '@/utils/get-page-title'
 import { PrevLoading } from '@/utils/loading'
 // import { COLLEGE_INFO, COLLEGE_DOMAIN_KEY } from '@/data/constant'
 // import getDomain from '@/utils/get-domain'
-import { WSConnect } from '@/utils/socket'
+// import { WSConnect } from '@/utils/socket'
 // import { Local } from '@/utils/storage'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -28,10 +28,8 @@ router.beforeEach(async (to, from, next) => {
   // 系统设置
   // const setting = await store.dispatch('user/getSystemSetting')
   // await store.dispatch('user/setCollegeSetting', setting)
-
   // determine whether the user has logged in
   const token = getToken()
-
   if (token) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
@@ -41,29 +39,28 @@ router.beforeEach(async (to, from, next) => {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
-        await store.dispatch('data/initialData')
+        // await store.dispatch('data/initialData')
         next()
       } else {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const user = await store.dispatch('user/getInfo')
-          const roles = user.roles
-          await store.dispatch('data/initialData')
+          await store.dispatch('user/getInfo')
+          // const roles = user.roles
+          const roles = ['admin']
+          // await store.dispatch('data/initialData')
           // get auth modules
-          const authModules = await store.dispatch('user/getAdministratorInfo', user)
+          // const authModules = await store.dispatch('user/getAdministratorInfo', user)
+          const authModules = ['Databoard', 'Unit', 'Branch', 'User', 'Content', 'Achievement']
           // 根据用户角色和授权模块生成路由配置
           const accessRoutes = await store.dispatch('permission/generateRoutes', { roles, authModules })
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
-
-          // socket
-          if (store.state.socket.isConnected === false) {
-            WSConnect()
-          }
-          // hack method to ensure that addRoutes is complete
-          // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
+          // if (accessRoutes && accessRoutes.length === 0) {
+          //   router.addRoutes(accessRoutes)
+          //   next({ ...to, replace: true })
+          // }
         } catch ({ message = '用户角色错误' }) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

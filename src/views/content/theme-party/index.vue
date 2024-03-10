@@ -165,7 +165,7 @@ import { Local } from '@/utils/storage'
 import draggable from 'vuedraggable'
 import { carouselFormDesc } from './config'
 // import cloneDeep from 'lodash/cloneDeep'
-const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
   'X-Token': Local.get('X-Token').value,
   'X-College-Domain': Local.get('X-College-Domain')
@@ -223,7 +223,6 @@ export default {
     },
     async onCarouselSubmit (data) {
       this.carousels = this.formData.carousels
-      console.log(data)
     }
   }
 }

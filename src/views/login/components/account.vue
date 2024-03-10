@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginForm" :model="ruleForm" :rules="rules" size="large" class="login-content-form" label-position="top">
-    <el-form-item prop="account" label="用户名">
-      <el-input v-model="ruleForm.account" placeholder="请输入用户名" type="text" clearable autocomplete="off">
+    <el-form-item prop="name" label="用户名">
+      <el-input v-model="ruleForm.name" placeholder="请输入用户名" type="text" clearable autocomplete="off">
         <!-- <template #prefix>
           <i class="el-input__icon el-icon-user" />
         </template> -->
@@ -15,23 +15,6 @@
         placeholder="请输入密码"
         show-password
       />
-    </el-form-item>
-    <el-form-item prop="identifyCode">
-      <el-row :gutter="15">
-        <el-col :span="16">
-          <el-input v-model="ruleForm.identifyCode" autocomplete="off" />
-        </el-col>
-        <el-col :span="8">
-          <div class="login-content-code" @click="getCaptcha">
-            <img :src="captchaImg" alt="验证码" class="login-content-code-img">
-          </div>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item size="small" prop="agreement">
-      <el-checkbox v-model="ruleForm.agreement" size="medium" class="agreement-check">
-        <UserAgreements :user-agreement="userAgreement" :privacy-agreement="privacyAgreement" :type="'login'" />
-      </el-checkbox>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" class="login-content-submit" :loading="loading.signIn" @click="onSignIn">
@@ -48,13 +31,13 @@ import { PrevLoading } from '@/utils/loading'
 import { formatAxis } from '@/utils/formatTime'
 import { Login } from '@/api'
 import { validPhoneNumber, validEmail } from '@/utils/validate'
-import UserAgreements from '@/components/UserAgreements.vue'
+// import UserAgreements from '@/components/UserAgreements.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'LoginAccount',
   components: {
-    UserAgreements
+    // UserAgreements
   },
   data () {
     const validateAccount = (rule, value, callback) => {
@@ -71,29 +54,29 @@ export default {
         callback()
       }
     }
-    const validateIdentifyCode = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入验证码'))
-      } else {
-        callback()
-      }
-    }
-    const validateAgreement = (rule, value, callback) => {
-      if (value !== true) {
-        callback(new Error('请仔细阅读协议内容并勾选'))
-      } else {
-        callback()
-      }
-    }
+    // const validateIdentifyCode = (rule, value, callback) => {
+    //   if (value === '') {
+    //     callback(new Error('请输入验证码'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validateAgreement = (rule, value, callback) => {
+    //   if (value !== true) {
+    //     callback(new Error('请仔细阅读协议内容并勾选'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       uuid: '',
       identifyCode: '',
       captchaImg: null,
       ruleForm: {
-        account: process.env.VUE_APP_LOGIN_USERNAME,
-        password: process.env.VUE_APP_LOGIN_PASSWORD,
-        identifyCode: '',
-        agreement: false
+        name: process.env.VUE_APP_LOGIN_USERNAME,
+        password: process.env.VUE_APP_LOGIN_PASSWORD
+        // identifyCode: '',
+        // agreement: false
       },
       loading: {
         signIn: false
@@ -101,10 +84,10 @@ export default {
       redirect: undefined,
       otherQuery: {},
       rules: {
-        account: [{ validator: validateAccount, trigger: 'change' }],
-        password: [{ validator: validatePassword, trigger: 'change' }],
-        identifyCode: [{ validator: validateIdentifyCode, trigger: 'change' }],
-        agreement: [{ validator: validateAgreement, trigger: 'change' }]
+        name: [{ validator: validateAccount, trigger: 'change' }],
+        password: [{ validator: validatePassword, trigger: 'change' }]
+        // identifyCode: [{ validator: validateIdentifyCode, trigger: 'change' }],
+        // agreement: [{ validator: validateAgreement, trigger: 'change' }]
       }
     }
   },
@@ -131,8 +114,8 @@ export default {
   },
   mounted () {
     this.$nextTick(async () => {
-      await this.getCaptcha()
-      await this.getAgreement()
+      // await this.getCaptcha()
+      // await this.getAgreement()
     })
   },
   methods: {
@@ -169,19 +152,19 @@ export default {
           this.loading.signIn = true
           const data = cloneDeep(this.ruleForm)
           switch (true) {
-            case validEmail(data.account):
-              data.email = data.account
+            case validEmail(data.name):
+              data.email = data.name
               break
-            case validPhoneNumber(data.account):
-              data.mobile = data.account
+            case validPhoneNumber(data.name):
+              data.mobile = data.name
               break
             default:
-              data.username = data.account
+              // data.username = data.name
               break
           }
-          data.captchaId = this.uuid
+          // data.captchaId = this.uuid
           data.captchaCode = data.identifyCode
-          delete data.account
+          // delete data.name
           delete data.identifyCode
           this.$store.dispatch('user/login', data)
             .then(() => {
@@ -190,7 +173,7 @@ export default {
             })
             .catch((e) => {
               this.loading.signIn = false
-              this.getCaptcha()
+              // this.getCaptcha()
             })
         } else {
           console.log('error submit!!')
@@ -278,7 +261,7 @@ export default {
 		height: 48px;
 		letter-spacing: 2px;
 		font-weight: 300;
-		margin-top: 15px;
+		margin-top: 30px;
 
 		.submit-text {
 			font-size: 16px;

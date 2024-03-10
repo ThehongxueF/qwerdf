@@ -5,12 +5,13 @@ import store from '@/store'
 import { TOKEN_KEY, COLLEGE_DOMAIN_KEY } from '@/data/constant'
 import { Local } from '@/utils/storage'
 import { getToken } from '@/utils/auth'
+import { toCamelcase, toSnakecase } from '@/utils/field-style'
 
 // 配置新建一个 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API + process.env.VUE_APP_API_PREFIX,
   timeout: 50000,
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  headers: { 'Content-Type': 'application/json' }
 })
 // 添加请求拦截器
 service.interceptors.request.use(
@@ -21,7 +22,13 @@ service.interceptors.request.use(
     if (token) {
       config.headers[TOKEN_KEY] = token
     }
-    config.data = qs.stringify(config.data, { arrayFormat: 'comma' })
+    if (config.data) {
+      config.data = toSnakecase(config.data)
+    }
+    if (config.params) {
+      config.data = toSnakecase(config.params)
+    }
+    // config.data = qs.stringify(config.data, { arrayFormat: 'comma' })
     return config
   },
   (error) => {
@@ -38,7 +45,7 @@ service.interceptors.response.use(
     if (res.code && res.code !== 0) {
       return Promise.reject(service.interceptors.response)
     } else {
-      return response.data
+      return toCamelcase(response.data)
     }
   },
   (error) => {

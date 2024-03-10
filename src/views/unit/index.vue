@@ -51,8 +51,8 @@
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
@@ -73,6 +73,7 @@
 <script>
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, unitFormDesc } from './config'
+import { Organizations } from '@/api'
 
 export default {
   name: 'Units',
@@ -84,39 +85,37 @@ export default {
       listLoading: false,
       drawerFormVisible: false,
       list: [],
-      total: 2,
-      formData: {
-        id: 3
-      }
+      total: 0,
+      formData: {}
     }
   },
   mounted () {
     this.getList()
   },
   methods: {
-    getList () {
-      this.list = [
-        {
-          id: '1',
-          title: '单位1',
-          contact: '联系人1',
-          mobile: '15523211021',
-          branchCount: '2',
-          endTime: '2023-10-9'
-        },
-        {
-          id: '2',
-          title: '单位2',
-          contact: '联系人2',
-          mobile: '15523211021',
-          branchCount: '10',
-          endTime: '2023-10-12'
-        }
-      ]
+    async getList () {
+      try {
+        const { organizations, count } = await Organizations.getOrganizations({ ...this.listQuery })
+        this.list = organizations
+        this.total = count
+      } catch ({ message = '获取组织机构列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
     },
-    handleUpdate () {
-      this.list.push(this.formData)
+    async handleUpdate () {
       this.drawerFormVisible = false
+      try {
+        const params = {
+          organization: this.formData
+        }
+        await Organizations.saveOrganizations(params)
+      } catch ({ message = '保存组织机构出错' }) {
+        this.getList()
+        this.$message.error(message)
+      } finally {
+        this.getList()
+      }
     }
   }
 }

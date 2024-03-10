@@ -1,7 +1,7 @@
 <template>
-  <div v-loading="pageLoading" class="app-container">
+  <div class="app-container">
     <el-row :gutter="10">
-      <h3>{{ '单位管理 ——— ' + unit.title }}<span class="used">有效</span>
+      <h3>{{ '单位管理 ——— ' + organization.name }}<span class="used">有效</span>
         <span class="outdate used">已过期</span></h3>
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }" class="mb10">
         <el-card class="base-info" shadow="hover">
@@ -31,11 +31,11 @@
             :label-style="labelStyle"
             :content-style="contentStyle"
           >
-            <el-descriptions-item label="单位名称"> {{ unit.title }} </el-descriptions-item>
-            <el-descriptions-item label="单位地址"> {{ unit.address }} </el-descriptions-item>
-            <el-descriptions-item label="单位联系人"> {{ unit.contact }} </el-descriptions-item>
-            <el-descriptions-item label="联系方式"> {{ unit.mobile }} </el-descriptions-item>
-            <el-descriptions-item label="自定义标语"> {{ '阿斯达克萨拉丁记录卡撒旦尽量躲开撒娇了' }} </el-descriptions-item>
+            <el-descriptions-item label="单位名称"> {{ organization.name }} </el-descriptions-item>
+            <el-descriptions-item label="单位地址"> {{ organization.address }} </el-descriptions-item>
+            <el-descriptions-item label="单位联系人"> {{ organization.contact }} </el-descriptions-item>
+            <el-descriptions-item label="联系方式"> {{ organization.mobile }} </el-descriptions-item>
+            <el-descriptions-item label="描述"> {{ organization.description }} </el-descriptions-item>
           </el-descriptions>
           <div class="outdate-time flex-space-between">
             <div>账号过期时间: <span> 2023-10-13</span></div>
@@ -135,8 +135,10 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
 import { unitFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
+import { Organizations } from '@/api'
 export default {
   mixins: [updateMixin, detailMixin],
   data () {
@@ -171,14 +173,43 @@ export default {
           id: 5,
           name: '支部五'
         }
-      ]
+      ],
+      organization: {}
+    }
+  },
+  watch: {
+    organization: {
+      deep: true,
+      handler (data) {
+        this.formData = cloneDeep(data)
+      }
     }
   },
   created () {
-    this.formData = this.unit
+    this.getDetail()
   },
   methods: {
-    handleUpdate () {
+    async getDetail () {
+      try {
+        const { organization } = await Organizations.getOrganization(this.id)
+        this.organization = organization
+      } catch ({ message = '获取组织机构详情出错' }) {
+        this.$message.error(message)
+      }
+    },
+    async  handleUpdate () {
+      const params = {
+        organization: this.formData
+      }
+      try {
+        await Organizations.saveOrganizations(params)
+        this.getDetail()
+      } catch ({ message = '更新组织机构出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      } finally {
+        this.drawerFormVisible = false
+      }
     }
   }
 }

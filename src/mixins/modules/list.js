@@ -13,8 +13,8 @@ export default {
       flattenTags,
       showMoreFilters: false,
       listQuery: {
-        page: 1,
-        perPage: 10
+        pageNo: 1,
+        pageSize: 10
       },
       list: [],
       listLoading: true,

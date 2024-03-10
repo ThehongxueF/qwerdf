@@ -54,8 +54,8 @@
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
@@ -76,6 +76,7 @@
 <script>
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, memberFormDesc } from './config'
+import { Users } from '@/api'
 
 export default {
   name: 'Units',
@@ -87,47 +88,37 @@ export default {
       listLoading: false,
       drawerFormVisible: false,
       list: [],
-      total: 2,
-      formData: {
-        id: 3
-      }
+      total: 0,
+      formData: {}
     }
   },
   mounted () {
     this.getList()
   },
   methods: {
-    getList () {
-      this.list = [
-        {
-          id: 1,
-          name: '党员一',
-          gender: '男性',
-          post: '职务111',
-          age: '30',
-          mobile: '15523698741',
-          nature: true,
-          branch: { id: 1, title: '单位一单位一单位一单位一' },
-          politicalBirthday: '1980-10-29',
-          standing: '10年'
-        },
-        {
-          id: 2,
-          name: '党员二',
-          gender: '男性',
-          post: '职务111',
-          age: '30',
-          mobile: '15523698741',
-          nature: true,
-          branch: { id: 1, title: '单位一单位一单位一单位一' },
-          politicalBirthday: '1980-10-29',
-          standing: '10年'
-        }
-      ]
+    async getList () {
+      try {
+        const { users, count } = await Users.getUsers({ ...this.listQuery })
+        this.list = users
+        this.total = count
+      } catch ({ message = '获取党员列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
     },
-    handleUpdate () {
-      this.list.push(this.formData)
+    async handleUpdate () {
       this.drawerFormVisible = false
+      try {
+        const params = {
+          user: this.formData
+        }
+        await Users.saveUsers(params)
+      } catch ({ message = '保存党员出错' }) {
+        this.getList()
+        this.$message.error(message)
+      } finally {
+        this.getList()
+      }
     }
   }
 }
