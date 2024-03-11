@@ -113,7 +113,7 @@ export default {
           department: this.formData
         }
         await Departments.saveDepartments(params)
-      } catch ({ message = '保存组织机构出错' }) {
+      } catch ({ message = '新增支部出错' }) {
         this.getList()
         this.$message.error(message)
       } finally {

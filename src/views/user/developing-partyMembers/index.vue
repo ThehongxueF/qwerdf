@@ -41,11 +41,14 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
-        <template #branch="{ row }">
-          {{ row.branch && row.branch.title }}
+        <template #memberType="{ }">
+          {{ '发展中党员' }}
+        </template>
+        <template #department="{ row }">
+          {{ row.department && row.department.name }}
         </template>
         <template #action="{ row }">
-          <router-link :to="{ name: 'PartyMembers.Detail' , params: { id: row.id } }">
+          <router-link :to="{ name: 'DevelopingPartyMembers.Detail' , params: { id: row.id } }">
             <el-link icon="el-icon-view">查看</el-link>
           </router-link>
         </template>
@@ -99,9 +102,11 @@ export default {
     async getList () {
       try {
         const { users, count } = await Users.getUsers({ ...this.listQuery })
-        this.list = users
+        if (users.length > 0) {
+          this.list = users.filter(item => item.memberType === 'false')
+        }
         this.total = count
-      } catch ({ message = '获取党员列表出错' }) {
+      } catch ({ message = '获取发展中党员列表出错' }) {
         this.$message.error(message)
         this.listLoading = false
       }
@@ -113,7 +118,7 @@ export default {
           user: this.formData
         }
         await Users.saveUsers(params)
-      } catch ({ message = '保存党员出错' }) {
+      } catch ({ message = '保存发展中党员出错' }) {
         this.getList()
         this.$message.error(message)
       } finally {

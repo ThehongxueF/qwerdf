@@ -41,8 +41,11 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
-        <template #branch="{ row }">
-          {{ row.branch && row.branch.title }}
+        <template #memberType="{ }">
+          {{ '党员' }}
+        </template>
+        <template #department="{ row }">
+          {{ row.department && row.department.name }}
         </template>
         <template #action="{ row }">
           <router-link :to="{ name: 'PartyMembers.Detail' , params: { id: row.id } }">
@@ -99,7 +102,9 @@ export default {
     async getList () {
       try {
         const { users, count } = await Users.getUsers({ ...this.listQuery })
-        this.list = users
+        if (users.length > 0) {
+          this.list = users.filter(item => item.memberType === 'true')
+        }
         this.total = count
       } catch ({ message = '获取党员列表出错' }) {
         this.$message.error(message)

@@ -23,9 +23,9 @@
           <el-dropdown-item disabled>
             <span style="color: #333; font-weight: 500;">你好，{{ userInfo.name }}</span>
           </el-dropdown-item>
-          <router-link to="/personal">
+          <!-- <router-link to="/personal">
             <el-dropdown-item divided>个人中心</el-dropdown-item>
-          </router-link>
+          </router-link> -->
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>

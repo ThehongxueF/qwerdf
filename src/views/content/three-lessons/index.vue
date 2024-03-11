@@ -42,7 +42,7 @@
           <el-button
             type="primary"
             icon="el-icon-plus"
-            @click="drawerFormVisible = true"
+            @click="drawerFormVisible = true, optionType = 'add'"
           >
             新增三会一课
           </el-button>
@@ -58,8 +58,8 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
-        <template #action="{}">
-          <el-link icon="el-icon-view" @click="editLesson">编辑</el-link>
+        <template #action="{ row }">
+          <el-link icon="el-icon-view" @click="editLesson(row.id)">编辑</el-link>
         </template>
       </common-table>
       <div class="page-container">
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { Local } from '@/utils/storage'
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, unitFormDesc } from './config'
@@ -143,7 +144,25 @@ export default {
       departments: [],
       departmentId: '',
       branch: '',
-      uploadedVideos: []
+      uploadedVideos: [],
+      conference: {},
+      optionType: 'add'
+    }
+  },
+  watch: {
+    conference: {
+      deep: true,
+      handler (data) {
+        this.formData = cloneDeep(data)
+        if (data.videos.length > 0) {
+          this.uploadedVideos = data.videos.map((item, index) => {
+            return {
+              url: item,
+              name: '视频' + (index + 1)
+            }
+          })
+        }
+      }
     }
   },
   mounted () {
@@ -173,7 +192,11 @@ export default {
     async handleUpdate () {
       this.drawerFormVisible = false
       this.formData.departmentId = this.departmentId
-      this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.response.link)
+      if (this.optionType === 'add') {
+        this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.response.link)
+      } else {
+        this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.url)
+      }
       try {
         const params = {
           conference: this.formData
@@ -206,8 +229,18 @@ export default {
     handleDelete (uid) {
       this.uploadedVideos = this.uploadedVideos.filter(item => item.uid !== uid)
     },
-    editLesson () {
+    editLesson (id) {
       this.drawerFormVisible = true
+      this.optionType = 'edit'
+      this.getDetail(id)
+    },
+    async getDetail (id) {
+      try {
+        const { conference } = await Conferences.getConference(id)
+        this.conference = conference
+      } catch ({ message = '获取三会一课详情出错' }) {
+        this.$message.error(message)
+      }
     }
   }
 }

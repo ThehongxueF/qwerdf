@@ -29,14 +29,15 @@
             :label-style="labelStyle"
             :content-style="contentStyle"
           >
-            <el-descriptions-item label="发展中党员名称"> {{ member.name }} </el-descriptions-item>
-            <el-descriptions-item label="性别"> {{ member.gender }} </el-descriptions-item>
-            <el-descriptions-item label="职位"> {{ member.post }} </el-descriptions-item>
-            <el-descriptions-item label="年龄"> {{ member.age }} </el-descriptions-item>
-            <el-descriptions-item label="联系方式"> {{ member.mobile }} </el-descriptions-item>
-            <el-descriptions-item label="政治生日"> {{ member.politicalBirthday }} </el-descriptions-item>
-            <el-descriptions-item label="党龄"> {{ member.standing }} </el-descriptions-item>
-            <el-descriptions-item label="所属支部"> {{ member.branch && member.branch.title }} </el-descriptions-item>
+            <el-descriptions-item label="党员名称"> {{ user.name }} </el-descriptions-item>
+            <el-descriptions-item label="性别"> {{ user.gender }} </el-descriptions-item>
+            <el-descriptions-item label="职位"> {{ user.post }} </el-descriptions-item>
+            <!-- <el-descriptions-item label="年龄"> {{ user.age }} </el-descriptions-item> -->
+            <el-descriptions-item label="联系方式"> {{ user.mobile }} </el-descriptions-item>
+            <el-descriptions-item label="政治生日"> {{ user.birthday }} </el-descriptions-item>
+            <el-descriptions-item label="入党时间"> {{ user.politicalDay }} </el-descriptions-item>
+            <!-- <el-descriptions-item label="党龄"> {{ user.standing }} </el-descriptions-item> -->
+            <el-descriptions-item label="所属支部"> {{ user.department && user.department.name }} </el-descriptions-item>
             <el-descriptions-item label="自定义标语"> {{ '阿斯达克萨拉丁记录卡撒旦尽量躲开撒娇了' }} </el-descriptions-item>
             <el-descriptions-item label="附件">
               <el-link
@@ -49,15 +50,13 @@
               </el-link>
               <i v-else>暂无</i>
             </el-descriptions-item>
-            <el-descriptions-item label="党员性质">               <el-switch
-              v-model="member.nature"
-              :disabled="member.nature"
-              active-text="党员"
-              inactive-text="发展中党员"
-              active-color="#13ce66"
-              inactive-color="#666666"
-            /> </el-descriptions-item>
           </el-descriptions>
+          <el-divider content-position="left">
+            工作经验
+          </el-divider>
+          <el-card shadow="never">
+            <froala-view v-model="user.experience" />
+          </el-card>
         </el-card>
       </el-col>
     </el-row>
@@ -74,43 +73,59 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from 'lodash'
+import _ from 'lodash'
 import { memberFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
+import { Users } from '@/api'
 export default {
   mixins: [updateMixin, detailMixin],
   data () {
     return {
       memberFormDesc,
       drawerFormVisible: false,
-      member: {
-        id: 1,
-        name: '发展中党员一',
-        gender: '男性',
-        post: '职务111',
-        age: '30',
-        mobile: '15523698741',
-        nature: false,
-        branch: { id: 1, title: '单位一单位一单位一单位一' },
-        politicalBirthday: '1980-10-29',
-        standing: '10年',
-        personalMessage: '个人寄语个人寄语个人寄语个人寄语个人寄语',
-        attachments: [{
-          id: 1,
-          name: 'name1'
-        }]
-      }
+      user: {}
     }
   },
   computed: {
     hasAttachments () {
-      return this.member.attachments && (this.member.attachments.length > 0)
+      return this.user.attachments && (this.user.attachments.length > 0)
+    }
+  },
+  watch: {
+    user: {
+      deep: true,
+      handler (data) {
+        this.formData = cloneDeep(data)
+        this.formData.departmentId = data.department && data.department.id
+      }
     }
   },
   created () {
-    this.formData = this.member
+    this.getDetail()
   },
   methods: {
-    handleUpdate () {
+    async getDetail () {
+      try {
+        const { user } = await Users.getUser(this.id)
+        this.user = user
+      } catch ({ message = '获取党员详情出错' }) {
+        this.$message.error(message)
+      }
+    },
+    async handleUpdate () {
+      const params = {
+        user: this.formData
+      }
+      try {
+        await Users.saveUsers(_.pickBy(params, (value) => value))
+        this.getDetail()
+      } catch ({ message = '更新党员出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      } finally {
+        this.drawerFormVisible = false
+      }
     },
     onDownload () {
 

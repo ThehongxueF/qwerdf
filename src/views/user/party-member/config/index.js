@@ -69,10 +69,10 @@ export const tableColumns = [
     prop: 'post',
     label: modelMap['post']
   },
-  {
-    prop: 'age',
-    label: modelMap['age']
-  },
+  // {
+  //   prop: 'age',
+  //   label: modelMap['age']
+  // },
   {
     prop: 'mobile',
     label: modelMap['mobile']
@@ -115,14 +115,14 @@ export const memberFormDesc = {
       { max: 20, message: '职位不得超过20个字符', trigger: 'change' }
     ]
   },
-  age: {
-    label: modelMap.age,
-    type: 'input',
-    required: true,
-    rules: [
-      { max: 10, message: '年龄不得超过10个字符', trigger: 'change' }
-    ]
-  },
+  // age: {
+  //   label: modelMap.age,
+  //   type: 'input',
+  //   required: true,
+  //   rules: [
+  //     { max: 10, message: '年龄不得超过10个字符', trigger: 'change' }
+  //   ]
+  // },
   mobile: {
     label: modelMap.mobile,
     type: 'input',

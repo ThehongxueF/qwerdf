@@ -5,6 +5,8 @@ import {
   imgUploadOptions
 } from '@/data/options'
 
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
+
 const headers = {
   [TOKEN_KEY]: getToken(),
   [COLLEGE_DOMAIN_KEY]: Local.get(COLLEGE_DOMAIN_KEY)
@@ -33,6 +35,16 @@ export const modelMap = {
   account: '单位账号',
   password: '单位密码',
   createdAt: '创建时间'
+}
+
+export const branchMap = {
+  id: 'id',
+  name: '支部名称',
+  organization: '所属单位',
+  organizationId: '所属单位',
+  introduction: '支部介绍',
+  attachmentIds: '相关文件',
+  logo: '头像'
 }
 
 export const tableColumns = [
@@ -140,4 +152,55 @@ export const unitFormDesc = {
   //     { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
   //   ]
   // }
+}
+
+export const branchFormDesc = {
+  name: {
+    label: branchMap.name,
+    type: 'input',
+    required: true,
+    rules: [
+      { max: 50, message: '支部名称不得超过50个字符', trigger: 'change' }
+    ]
+  },
+  introduction: {
+    label: branchMap.introduction,
+    type: 'textarea',
+    required: true
+  },
+  logo: {
+    label: branchMap.logo,
+    type: 'image-uploader',
+    tip: '建议长宽比例 `1:1`',
+    attrs: {
+      ...imgUploadOptions,
+      headers
+    }
+  },
+  attachmentIds: {
+    label: branchMap.attachmentIds,
+    type: 'upload-file',
+    valueFormatter (files) {
+      files = files.map(item => item.id ? item.id : item)
+      return files
+    },
+    displayFormatter (files) {
+      return Array.isArray(files) ? files.map(item => {
+        return item.name ? item : ({
+          id: item.id,
+          size: item.size,
+          name: `${item.fileName}${item.extension}`
+        })
+      }) : files
+    },
+    attrs: {
+      limit: 5,
+      headers,
+      action: uploadUrl,
+      isCanDownload: false,
+      responseFn (response, file) {
+        return response
+      }
+    }
+  }
 }

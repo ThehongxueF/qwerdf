@@ -110,6 +110,7 @@
             <el-button
               type="primary"
               icon="el-icon-plus"
+              @click="addBranch"
             >
               新增支部
             </el-button>
@@ -132,19 +133,31 @@
       size="800px"
       :request-fn="handleUpdate"
     />
+    <ele-form-drawer
+      v-model="branchFormData"
+      :span="24"
+      :drawer-attrs="drawerAttrs"
+      :form-desc="branchFormDesc"
+      :visible.sync="branchDrawerFormVisible"
+      title="编辑单位"
+      size="800px"
+      :request-fn="handleUpdateBranch"
+    />
   </div>
 </template>
 <script>
 import { cloneDeep } from 'lodash'
-import { unitFormDesc } from '../config'
+import { unitFormDesc, branchFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
-import { Organizations } from '@/api'
+import { Organizations, Departments } from '@/api'
 export default {
   mixins: [updateMixin, detailMixin],
   data () {
     return {
       unitFormDesc,
+      branchFormDesc,
       drawerFormVisible: false,
+      branchDrawerFormVisible: false,
       unit: {
         title: '单位名称1',
         address: '上海市浦东新区',
@@ -174,7 +187,8 @@ export default {
           name: '支部五'
         }
       ],
-      organization: {}
+      organization: {},
+      branchFormData: {}
     }
   },
   watch: {
@@ -210,6 +224,22 @@ export default {
       } finally {
         this.drawerFormVisible = false
       }
+    },
+    async handleUpdateBranch () {
+      try {
+        this.branchFormData.organizationId = this.id
+        const params = {
+          department: this.branchFormData
+        }
+        await Departments.saveDepartments(params)
+      } catch ({ message = '新增支部出错' }) {
+        this.$message.error(message)
+      } finally {
+        this.branchDrawerFormVisible = false
+      }
+    },
+    addBranch () {
+      this.branchDrawerFormVisible = true
     }
   }
 }
