@@ -24,13 +24,9 @@ export const collegeFormDesc = {
   badge: {
     label: '站点LOGO',
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
-      headers,
-      crop: true, // 是否裁剪
-      cropHeight: 200, // 裁剪高度
-      cropWidth: 200 // 裁剪宽度
+      headers
     }
   }
 }
@@ -74,10 +70,7 @@ export const carouselFormDesc = {
       size: 100,
       ...imgUploadOptions,
       headers,
-      title: '轮播图',
-      crop: true, // 是否裁剪
-      cropHeight: 542, // 裁剪高度
-      cropWidth: 1920 // 裁剪宽度
+      title: '轮播图'
     }
   },
   orderList: {

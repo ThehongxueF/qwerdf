@@ -76,7 +76,6 @@ export const unitFormDesc = {
   pics: {
     label: '图片',
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       multiple: true,

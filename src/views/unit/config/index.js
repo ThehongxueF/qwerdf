@@ -101,7 +101,6 @@ export const unitFormDesc = {
   avatar: {
     label: modelMap.avatar,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers
@@ -171,7 +170,6 @@ export const branchFormDesc = {
   logo: {
     label: branchMap.logo,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers

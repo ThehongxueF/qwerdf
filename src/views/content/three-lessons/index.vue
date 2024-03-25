@@ -166,8 +166,8 @@ export default {
     }
   },
   mounted () {
-    this.getList()
     this.getDepartmentsList()
+    this.getList()
   },
   methods: {
     async getList () {

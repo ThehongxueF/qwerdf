@@ -9,7 +9,7 @@
       <el-row :gutter="20">
         <el-col :md="8" :lg="6" :xl="4" class="mb10">
           <el-select
-            v-model="branch"
+            v-model="branchId"
             placeholder="请选择支部"
             style="width: 100%;"
             clearable
@@ -17,8 +17,8 @@
             <el-option
               v-for="(item, index) in branchOptions"
               :key="index"
-              :label="item"
-              :value="item"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-col>
@@ -26,7 +26,7 @@
           <el-button
             type="primary"
             icon="el-icon-plus"
-            @click="drawerFormVisible = true"
+            @click="drawerFormVisible = true, optionType = 'add'"
           >
             新增模块
           </el-button>
@@ -42,7 +42,7 @@
           @field-search="fieldSearch"
         >
           <template #action="{}">
-            <el-link icon="el-icon-view" @click="drawerFormVisible = true">编辑</el-link>
+            <el-link icon="el-icon-view" @click="editLesson(row.id)">编辑</el-link>
           </template>
         </common-table>
         <div class="page-container">
@@ -101,9 +101,11 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { Local } from '@/utils/storage'
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, moduleFormDesc } from './config'
+import { Departments, DynamicModels } from '@/api'
 const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
 const uploadHeaders = {
   'X-Token': Local.get('X-Token').value,
@@ -119,42 +121,79 @@ export default {
       moduleFormDesc,
       originColumns: tableColumns,
       listLoading: false,
-      branch: '支部一',
-      branchOptions: ['支部一', '支部二', '支部三'],
+      branchId: '',
+      branchOptions: [],
       drawerFormVisible: false,
       uploadedVideos: [],
       list: [],
-      formData: {
-        id: 4
+      formData: {},
+      dynamicModel: {},
+      optionType: 'add'
+    }
+  },
+  watch: {
+    dynamicModel: {
+      deep: true,
+      handler (data) {
+        this.formData = cloneDeep(data)
+        if (data.videos.length > 0) {
+          this.uploadedVideos = data.videos.map((item, index) => {
+            return {
+              url: item,
+              name: '视频' + (index + 1)
+            }
+          })
+        }
       }
     }
   },
-  mounted () {
-    this.getList()
+  async mounted () {
+    await this.getDepartmentsList()
+    await this.getList()
   },
   methods: {
-    getList () {
-      this.list = [
-        {
-          id: 1,
-          title: '图片模块',
-          type: '图片'
-        },
-        {
-          id: 2,
-          title: '文字模块',
-          type: '文字(富文本)'
-        },
-        {
-          id: 3,
-          title: '视频模块',
-          type: '视频'
-        }
-      ]
+    async getList () {
+      try {
+        const { dynamicModels, count } = await DynamicModels.getDynamicModels({ ...this.listQuery })
+        this.list = dynamicModels
+        this.total = count
+      } catch ({ message = '获取自定义模块出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
     },
-    handleUpdate () {
-      this.list.push(this.formData)
+    async getDepartmentsList () {
+      try {
+        const { departments } = await Departments.getDepartments({ pageNo: 1,
+          pageSize: 10 })
+        this.branchOptions = departments
+        if (this.branchOptions.length > 0) {
+          this.branchId = this.branchOptions[0].id
+        }
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
+    },
+    async handleUpdate () {
       this.drawerFormVisible = false
+      this.formData.departmentId = this.branchId
+      if (this.optionType === 'add') {
+        this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.response.link)
+      } else {
+        this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.url)
+      }
+      try {
+        const params = {
+          dynamicModel: this.formData
+        }
+        await DynamicModels.saveDynamicModels(params)
+      } catch ({ message = '保存自定义模块出错' }) {
+        this.getList()
+        this.$message.error(message)
+      } finally {
+        this.getList()
+      }
     },
     handleSuccess (response, file, fileList) {
       this.uploadedVideos = fileList
@@ -175,6 +214,19 @@ export default {
     },
     handleDelete (uid) {
       this.uploadedVideos = this.uploadedVideos.filter(item => item.uid !== uid)
+    },
+    editLesson (id) {
+      this.drawerFormVisible = true
+      this.optionType = 'edit'
+      this.getDetail(id)
+    },
+    async getDetail (id) {
+      try {
+        const { dynamicModel } = await DynamicModels.getDynamicModel(id)
+        this.dynamicModel = dynamicModel
+      } catch ({ message = '获取自定义模块详情出错' }) {
+        this.$message.error(message)
+      }
     }
   }
 }

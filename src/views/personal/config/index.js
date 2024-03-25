@@ -26,13 +26,9 @@ export const formDesc = {
   headImageUrl: {
     label: modelMap.headImageUrl,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
-      headers,
-      crop: true, // 是否裁剪
-      cropHeight: 200, // 裁剪高度
-      cropWidth: 200 // 裁剪宽度
+      headers
     }
   },
   username: {

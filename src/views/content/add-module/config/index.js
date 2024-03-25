@@ -24,18 +24,19 @@ const headers = {
 
 export const modelMap = {
   id: 'id',
-  title: '模块名称',
-  type: '内容类型',
-  image: '图片',
-  details: '文字(富文本)',
-  attachmentIds: '文件',
-  videos: '视频'
+  modelName: '模块名称',
+  modelType: '模块类型',
+  pics: '图片',
+  description: '文字(富文本)',
+  files: '文件',
+  videos: '视频',
+  department: '支部'
 }
 
 export const tableColumns = [
   {
-    prop: 'title',
-    label: modelMap['title'],
+    prop: 'modelName',
+    label: modelMap['modelName'],
     align: 'left',
     width: '200px'
   },
@@ -47,46 +48,45 @@ export const tableColumns = [
 ]
 
 export const moduleFormDesc = {
-  title: {
-    label: modelMap.title,
+  modelName: {
+    label: modelMap.modelName,
     type: 'input',
     required: true,
     rules: [
       { max: 50, message: '模块名称不得超过50个字符', trigger: 'change' }
     ]
   },
-  type: {
-    label: modelMap.type,
+  modelType: {
+    label: modelMap.modelType,
     type: 'select',
     required: true,
     options: ['图片', '文字(富文本)', '视频', '文件']
   },
-  details: {
-    label: modelMap.details,
+  description: {
+    label: modelMap.description,
     type: 'froala-editor',
     vif (data) {
-      return data.type === '文字(富文本)'
+      return data.modelType === '文字(富文本)'
     },
     // required: true,
     attrs: {
       requestHeaders: headers
     }
   },
-  image: {
-    label: modelMap.image,
+  pics: {
+    label: modelMap.pics,
     type: 'image-uploader',
     vif (data) {
-      return data.type === '图片'
+      return data.modelType === '图片'
     },
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       multiple: true,
       headers
     }
   },
-  attachmentIds: {
-    label: modelMap.attachmentIds,
+  files: {
+    label: modelMap.files,
     type: 'upload-file',
     // vif (data) {
     //   return data.type === '文件'
@@ -117,7 +117,7 @@ export const moduleFormDesc = {
   videos: {
     label: '视频',
     vif (data) {
-      return data.type === '视频'
+      return data.modelType === '视频'
     }
   }
 }

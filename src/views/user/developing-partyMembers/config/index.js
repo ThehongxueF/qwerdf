@@ -197,7 +197,6 @@ export const memberFormDesc = {
   avatar: {
     label: modelMap.avatar,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers

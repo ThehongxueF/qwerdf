@@ -249,7 +249,6 @@ export const achievementFormDesc = {
   coverUrl: {
     label: modelMap.coverUrl,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers
@@ -420,7 +419,6 @@ export const achievementUpdateFormDesc = {
   coverUrl: {
     label: modelMap.coverUrl,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers
@@ -562,7 +560,6 @@ export const achievementUpdateFormDescUnNew = {
   coverUrl: {
     label: modelMap.coverUrl,
     type: 'image-uploader',
-    tip: '建议长宽比例 `1:1`',
     attrs: {
       ...imgUploadOptions,
       headers

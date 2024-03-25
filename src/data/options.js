@@ -105,7 +105,6 @@ export const videoType = ['mp4', 'mkv', 'm2v', 'mp3', 'wav', 'wmv']
 export const imgUploadOptions = {
   action: uploadUrl,
   headers: uploadHeaders,
-  fileSize: 2,
   responseFn (response, file) {
     return response.link
   }

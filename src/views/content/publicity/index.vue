@@ -16,8 +16,8 @@
             <el-option
               v-for="(item, index) in branchOptions"
               :key="index"
-              :label="item"
-              :value="item"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-col>
@@ -56,7 +56,8 @@
 
 <script>
 import { Local } from '@/utils/storage'
-const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
+import { Departments } from '@/api'
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
   'X-Token': Local.get('X-Token').value,
   'X-College-Domain': Local.get('X-College-Domain')
@@ -68,11 +69,27 @@ export default {
       uploadUrl,
       uploadHeaders,
       uploadedFiles: [],
-      branch: '支部一',
-      branchOptions: ['支部一', '支部二', '支部三']
+      branch: '',
+      branchOptions: []
     }
   },
+  async mounted () {
+    await this.getDepartmentsList()
+  },
   methods: {
+    async getDepartmentsList () {
+      try {
+        const { departments } = await Departments.getDepartments({ pageNo: 1,
+          pageSize: 10 })
+        this.branchOptions = departments
+        if (this.branchOptions.length > 0) {
+          this.branchId = this.branchOptions[0].id
+        }
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
+    },
     handleChange (file, fileList) {
       this.uploadedFiles = fileList
     },
@@ -91,10 +108,11 @@ export default {
   }
 }
 .file-content {
-  display: flex;
-  align-items: center;
+  // display: flex;
+  // align-items: center;
 }
 .file-item {
+  margin-top: 10px;
   margin-right: 20px;
 }
 

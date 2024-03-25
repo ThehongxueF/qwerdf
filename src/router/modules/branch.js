@@ -15,7 +15,7 @@ export default {
       name: 'Branchs',
       hidden: true,
       component: () => import('@/views/branch/index.vue'),
-      meta: { title: '支部管理', noCache: false, breadcrumb: false }
+      meta: { title: '支部管理', noCache: true, breadcrumb: false }
     },
     {
       path: ':id',

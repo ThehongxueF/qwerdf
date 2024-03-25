@@ -9,16 +9,17 @@
       <el-row :gutter="20">
         <el-col :md="8" :lg="6" :xl="4" class="mb10">
           <el-select
-            v-model="branch"
+            v-model="branchId"
             placeholder="请选择支部"
             style="width: 100%;"
             clearable
+            @change="selectChange"
           >
             <el-option
               v-for="(item, index) in branchOptions"
               :key="index"
-              :label="item"
-              :value="item"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-col>
@@ -164,6 +165,7 @@
 import { Local } from '@/utils/storage'
 import draggable from 'vuedraggable'
 import { carouselFormDesc } from './config'
+import { Departments } from '@/api'
 // import cloneDeep from 'lodash/cloneDeep'
 const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
@@ -181,8 +183,8 @@ export default {
       carousels: [],
       formData: {},
       carouselFormLoading: false,
-      branch: '支部一',
-      branchOptions: ['支部一', '支部二', '支部三'],
+      branchId: '',
+      branchOptions: [],
       uploadedVideos: [],
       uploadedImages: [],
       uploadedFiles: [],
@@ -190,7 +192,26 @@ export default {
       dialogImageUrl: ''
     }
   },
+  async mounted () {
+    await this.getDepartmentsList()
+  },
   methods: {
+    async getDepartmentsList () {
+      try {
+        const { departments } = await Departments.getDepartments({ pageNo: 1,
+          pageSize: 10 })
+        this.branchOptions = departments
+        if (this.branchOptions.length > 0) {
+          this.branchId = this.branchOptions[0].id
+        }
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
+    },
+    selectChange (val) {
+      console.log('val', val)
+    },
     handleSuccess (response, file, fileList) {
       this.uploadedVideos = fileList
     },
