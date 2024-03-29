@@ -197,6 +197,7 @@ export default {
       } else {
         this.formData.videos = this.uploadedVideos && this.uploadedVideos.map(item => item.url)
       }
+      console.log('files', this.formData)
       try {
         const params = {
           conference: this.formData

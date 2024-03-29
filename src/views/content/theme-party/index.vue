@@ -64,6 +64,7 @@
                 class="upload-demo"
                 :action="uploadUrl"
                 multiple
+                :on-success="handleImageSuccess"
                 :on-remove="handleRemoveImage"
                 list-type="picture-card"
                 :file-list="uploadedImages"
@@ -87,7 +88,7 @@
               <el-upload
                 class="upload-demo"
                 :action="uploadUrl"
-                multiple
+                multipleuploaded-files
                 :on-remove="handleRemoveFile"
                 :on-change="handleChange"
                 :file-list="uploadedFiles"
@@ -158,6 +159,7 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-button @click="handleUpdate">保存</el-button>
   </div>
 </template>
 
@@ -165,7 +167,7 @@
 import { Local } from '@/utils/storage'
 import draggable from 'vuedraggable'
 import { carouselFormDesc } from './config'
-import { Departments } from '@/api'
+import { Departments, PartyDays } from '@/api'
 // import cloneDeep from 'lodash/cloneDeep'
 const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
@@ -194,6 +196,7 @@ export default {
   },
   async mounted () {
     await this.getDepartmentsList()
+    await this.getPartyDayList()
   },
   methods: {
     async getDepartmentsList () {
@@ -209,11 +212,24 @@ export default {
         this.listLoading = false
       }
     },
+    async getPartyDayList () {
+      try {
+        const { partyDays } = await PartyDays.getPartyDays({ pageNo: 1,
+          pageSize: 10 })
+        console.log('partyDays', partyDays)
+      } catch ({ message = '获取主题党日出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
+      }
+    },
     selectChange (val) {
       console.log('val', val)
     },
     handleSuccess (response, file, fileList) {
       this.uploadedVideos = fileList
+    },
+    handleImageSuccess (response, file, fileList) {
+      this.uploadedImages = fileList
     },
     handleRemove (file, fileList) {
       this.uploadedVideos = fileList
@@ -240,7 +256,26 @@ export default {
       this.uploadedFiles = fileList
     },
     handleRemoveFile (file) {},
-    handleUpdate () {
+    async handleUpdate () {
+      const videos = this.uploadedVideos && this.uploadedVideos.map(item => item.response.link)
+      const pics = this.uploadedImages && this.uploadedImages.map(item => item.response.link)
+      const files = this.uploadedFiles && this.uploadedFiles.map(item => item.response.link)
+      console.log(videos, pics, files)
+      const params = {
+        partyDay: {
+          name: '主题党日1',
+          videos,
+          pics,
+          files,
+          banners: this.carousels,
+          departmentId: this.branchId
+        }
+      }
+      try {
+        await PartyDays.savePartyDays(params)
+      } catch ({ message = '保存主题党日失败' }) {
+        this.$message.error(message)
+      }
     },
     async onCarouselSubmit (data) {
       this.carousels = this.formData.carousels

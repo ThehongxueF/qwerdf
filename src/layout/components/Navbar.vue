@@ -37,7 +37,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Login, Notification } from '@/api'
+import { Notification } from '@/api'
 import defaultAvatar from '@/assets/common/default-avatar.png'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
@@ -133,7 +133,6 @@ export default {
     },
     async logout () {
       // 登出调用接口，通知后端
-      await Login.signOut()
       // 登出，前端清空数据
       await this.$store.dispatch('user/logout')
       this.$message.success('已退出登录')

@@ -35,7 +35,6 @@
             <!-- <el-descriptions-item label="年龄"> {{ user.age }} </el-descriptions-item> -->
             <el-descriptions-item label="联系方式"> {{ user.mobile }} </el-descriptions-item>
             <el-descriptions-item label="政治生日"> {{ user.birthday }} </el-descriptions-item>
-            <el-descriptions-item label="入党时间"> {{ user.politicalDay }} </el-descriptions-item>
             <!-- <el-descriptions-item label="党龄"> {{ user.standing }} </el-descriptions-item> -->
             <el-descriptions-item label="所属支部"> {{ user.department && user.department.name }} </el-descriptions-item>
             <el-descriptions-item label="自定义标语"> {{ '阿斯达克萨拉丁记录卡撒旦尽量躲开撒娇了' }} </el-descriptions-item>

@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <el-row :gutter="10">
-      <h3>{{ '单位管理 ——— ' + organization.name }}<span class="used">有效</span>
-        <span class="outdate used">已过期</span></h3>
+      <h3>{{ '单位管理 ——— ' + organization.name }}?</h3>
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }" class="mb10">
         <el-card class="base-info" shadow="hover">
           <div class="header" style="position:relative">
@@ -38,13 +37,12 @@
             <el-descriptions-item label="描述"> {{ organization.description }} </el-descriptions-item>
           </el-descriptions>
           <div class="outdate-time flex-space-between">
-            <div>账号过期时间: <span> 2023-10-13</span></div>
-            <el-button
-              type="primary"
-              icon="el-icon-plus"
-            >
-              立即续费
-            </el-button>
+            <div>开通时间: <span> {{ organization.servedAt }}</span></div>
+            <el-switch
+              v-model="value"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            />
           </div>
         </el-card>
       </el-col>
@@ -188,7 +186,8 @@ export default {
         }
       ],
       organization: {},
-      branchFormData: {}
+      branchFormData: {},
+      value: true
     }
   },
   watch: {

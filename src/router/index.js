@@ -6,6 +6,7 @@ Vue.use(Router)
 
 /* Router Modules */
 import databoardRoutes from './modules/data-board'
+import adminUsersRoutes from './modules/admin-users'
 import unitRoutes from './modules/unit'
 import branchRoutes from './modules/branch'
 import userRoutes from './modules/user'
@@ -123,6 +124,7 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   databoardRoutes,
+  adminUsersRoutes,
   unitRoutes,
   branchRoutes,
   userRoutes,

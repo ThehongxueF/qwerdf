@@ -16,3 +16,8 @@ export function setToken (token) {
 export function removeToken () {
   return Vue.ls.remove(TOKEN_KEY)
 }
+
+export function getUserInfo () {
+  const UserInfo = Vue.ls.get('UserInfo')
+  return UserInfo
+}

@@ -94,7 +94,8 @@ export const unitFormDesc = {
         return item.name ? item : ({
           id: item.id,
           size: item.size,
-          name: `${item.fileName}${item.extension}`
+          // name: `${item.fileName}${item.extension}`,
+          name: item
         })
       }) : files
     },

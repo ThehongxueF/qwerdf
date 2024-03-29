@@ -29,33 +29,13 @@
             :label-style="labelStyle"
             :content-style="contentStyle"
           >
-            <el-descriptions-item label="党员名称"> {{ user.name }} </el-descriptions-item>
-            <el-descriptions-item label="性别"> {{ user.gender }} </el-descriptions-item>
-            <el-descriptions-item label="职位"> {{ user.post }} </el-descriptions-item>
-            <!-- <el-descriptions-item label="年龄"> {{ user.age }} </el-descriptions-item> -->
-            <el-descriptions-item label="联系方式"> {{ user.mobile }} </el-descriptions-item>
-            <el-descriptions-item label="政治生日"> {{ user.birthday }} </el-descriptions-item>
-            <!-- <el-descriptions-item label="党龄"> {{ user.standing }} </el-descriptions-item> -->
-            <el-descriptions-item label="所属支部"> {{ user.department && user.department.name }} </el-descriptions-item>
-            <el-descriptions-item label="自定义标语"> {{ '阿斯达克萨拉丁记录卡撒旦尽量躲开撒娇了' }} </el-descriptions-item>
-            <el-descriptions-item label="附件">
-              <el-link
-                v-if="hasAttachments"
-                icon="el-icon-download"
-                type="info"
-                @click="onDownload"
-              >
-                下载文件
-              </el-link>
-              <i v-else>暂无</i>
-            </el-descriptions-item>
+            <el-descriptions-item label="管理员名称"> {{ adminUser.name }} </el-descriptions-item>
+            <el-descriptions-item label="联系方式"> {{ adminUser.mobile }} </el-descriptions-item>
+            <el-descriptions-item label="邮箱"> {{ adminUser.email }} </el-descriptions-item>
+            <el-descriptions-item label="管理类型"> {{ adminUser.role }} </el-descriptions-item>
+            <el-descriptions-item label="管理对象"> {{ adminUser.target && adminUser.target.name }} </el-descriptions-item>
+
           </el-descriptions>
-          <el-divider content-position="left">
-            工作经验
-          </el-divider>
-          <el-card shadow="never">
-            <froala-view v-model="user.experience" />
-          </el-card>
         </el-card>
       </el-col>
     </el-row>
@@ -65,7 +45,7 @@
       :drawer-attrs="drawerAttrs"
       :form-desc="memberFormDesc"
       :visible.sync="drawerFormVisible"
-      title="编辑单位"
+      title="编辑管理员"
       size="800px"
       :request-fn="handleUpdate"
     />
@@ -76,50 +56,61 @@ import { cloneDeep } from 'lodash'
 import _ from 'lodash'
 import { memberFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
-import { Users } from '@/api'
+import { AdminUsers } from '@/api'
 export default {
   mixins: [updateMixin, detailMixin],
   data () {
     return {
       memberFormDesc,
       drawerFormVisible: false,
-      user: {}
+      adminUser: {}
     }
   },
   computed: {
     hasAttachments () {
-      return this.user.attachments && (this.user.attachments.length > 0)
+      return this.adminUser.attachments && (this.adminUser.attachments.length > 0)
     }
   },
   watch: {
-    user: {
+    adminUser: {
       deep: true,
       handler (data) {
         this.formData = cloneDeep(data)
-        this.formData.departmentId = data.department && data.department.id
+        // this.formData.organizationId = data.target && data.target.id
+        // this.formData.branchId = data.target && data.target.id
       }
     }
   },
   created () {
     this.getDetail()
+    if (this.adminUser.role === '机构') {
+      this.formData.organizationId = this.adminUser.target && this.adminUser.target.id
+    } else {
+      this.formData.branchId = this.adminUser.target && this.adminUser.target.id
+    }
   },
   methods: {
     async getDetail () {
       try {
-        const { user } = await Users.getUser(this.id)
-        this.user = user
-      } catch ({ message = '获取党员详情出错' }) {
+        const { adminUser } = await AdminUsers.getAdminUser(this.id)
+        this.adminUser = adminUser
+      } catch ({ message = '获取管理员详情出错' }) {
         this.$message.error(message)
       }
     },
     async handleUpdate () {
+      this.formData.targetId = this.formData.organizationId || this.formData.branchId
+      this.formData.targetType = this.formData.role
+      delete this.formData.branchId
+      delete this.formData.organizationId
+      console.log('this.formData', this.formData)
       const params = {
-        user: this.formData
+        adminUser: this.formData
       }
       try {
-        await Users.saveUsers(_.pickBy(params, (value) => value))
+        await AdminUsers.saveAdminUsers(_.pickBy(params, (value) => value))
         this.getDetail()
-      } catch ({ message = '更新党员出错' }) {
+      } catch ({ message = '更新管理员出错' }) {
         this.$message.error(message)
         this.listLoading = false
       } finally {

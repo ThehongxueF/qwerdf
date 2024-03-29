@@ -4,7 +4,7 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, getUserInfo } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import { PrevLoading } from '@/utils/loading'
 // import { COLLEGE_INFO, COLLEGE_DOMAIN_KEY } from '@/data/constant'
@@ -30,6 +30,7 @@ router.beforeEach(async (to, from, next) => {
   // await store.dispatch('user/setCollegeSetting', setting)
   // determine whether the user has logged in
   const token = getToken()
+  const userInfo = getUserInfo()
   if (token) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
@@ -46,12 +47,20 @@ router.beforeEach(async (to, from, next) => {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           await store.dispatch('user/getInfo')
+          await store.dispatch('user/setInfo', userInfo)
           // const roles = user.roles
           const roles = ['admin']
+          console.log('userInfo', store.getters.userInfo)
           // await store.dispatch('data/initialData')
           // get auth modules
           // const authModules = await store.dispatch('user/getAdministratorInfo', user)
-          const authModules = ['Databoard', 'Unit', 'Branch', 'User', 'Content', 'Achievement']
+          let authModules = []
+          if (userInfo.role === '超管') {
+            authModules = ['Databoard', 'Admin', 'Unit', 'Branch', 'User', 'Content', 'Achievement']
+          } else {
+            authModules = ['Admin', 'Unit', 'Branch', 'User', 'Content', 'Achievement']
+          }
+
           // 根据用户角色和授权模块生成路由配置
           const accessRoutes = await store.dispatch('permission/generateRoutes', { roles, authModules })
           // dynamically add accessible routes

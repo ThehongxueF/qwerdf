@@ -30,10 +30,10 @@ export const modelMap = {
   avatar: '头像',
   mobile: '联系方式',
   branchCount: '支部数量',
-  endTime: '账号有效期',
+  servedAt: '开通时间',
   address: '单位地址',
-  account: '单位账号',
-  password: '单位密码',
+  adminName: '单位账号',
+  adminPassword: '单位密码',
   createdAt: '创建时间'
 }
 
@@ -105,7 +105,7 @@ export const unitFormDesc = {
       ...imgUploadOptions,
       headers
     }
-  }
+  },
   // address: {
   //   label: modelMap.address,
   //   type: 'input',
@@ -130,27 +130,31 @@ export const unitFormDesc = {
   //     { max: 20, message: '联系方式不得超过20个字符', trigger: 'change' }
   //   ]
   // },
-  // endTime: {
-  //   label: modelMap.endTime,
-  //   type: 'input',
-  //   required: true,
-  // },
-  // account: {
-  //   label: modelMap.account,
-  //   type: 'input',
-  //   required: true,
-  //   rules: [
-  //     { max: 20, message: '账号不得超过20个字符', trigger: 'change' }
-  //   ]
-  // },
-  // password: {
-  //   label: modelMap.password,
-  //   type: 'password',
-  //   required: true,
-  //   rules: [
-  //     { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
-  //   ]
-  // }
+  servedAt: {
+    label: modelMap.servedAt,
+    type: 'date',
+    attrs: {
+      placeholder: '请选择日期',
+      format: 'yyyy-MM-dd',
+      valueFormat: 'yyyy-MM-dd'
+    }
+  },
+  adminName: {
+    label: modelMap.adminName,
+    type: 'input',
+    required: true,
+    rules: [
+      { max: 20, message: '账号不得超过20个字符', trigger: 'change' }
+    ]
+  },
+  adminPassword: {
+    label: modelMap.adminPassword,
+    type: 'password',
+    required: true,
+    rules: [
+      { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
+    ]
+  }
 }
 
 export const branchFormDesc = {

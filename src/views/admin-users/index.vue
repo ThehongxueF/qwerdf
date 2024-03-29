@@ -27,7 +27,7 @@
             icon="el-icon-plus"
             @click="drawerFormVisible = true"
           >
-            新增单位
+            新增管理员
           </el-button>
         </el-col>
       </el-row>
@@ -41,8 +41,14 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
+        <template #memberType="{ }">
+          {{ '管理员' }}
+        </template>
+        <template #department="{ row }">
+          {{ row.department && row.department.name }}
+        </template>
         <template #action="{ row }">
-          <router-link :to="{ name: 'Units.Detail' , params: { id: row.id } }">
+          <router-link :to="{ name: 'AdminUsers.Detail' , params: { id: row.id } }">
             <el-link icon="el-icon-view">查看</el-link>
           </router-link>
         </template>
@@ -61,9 +67,9 @@
       v-model="formData"
       :span="24"
       :drawer-attrs="drawerAttrs"
-      :form-desc="unitFormDesc"
+      :form-desc="memberFormDesc"
       :visible.sync="drawerFormVisible"
-      title="新增单位"
+      title="新增管理员"
       size="800px"
       :request-fn="handleUpdate"
     />
@@ -72,15 +78,15 @@
 
 <script>
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
-import { tableColumns, unitFormDesc } from './config'
-import { Organizations } from '@/api'
+import { tableColumns, memberFormDesc } from './config'
+import { AdminUsers } from '@/api'
 
 export default {
-  name: 'Units',
+  name: 'AdminUsers',
   mixins: [listMixin, updateMixin, detailMixin],
   data () {
     return {
-      unitFormDesc,
+      memberFormDesc,
       originColumns: tableColumns,
       listLoading: false,
       drawerFormVisible: false,
@@ -95,24 +101,24 @@ export default {
   methods: {
     async getList () {
       try {
-        const { organizations, count } = await Organizations.getOrganizations({ ...this.listQuery })
-        this.list = organizations
+        const { adminUsers, count } = await AdminUsers.getAdminUsers({ ...this.listQuery })
+        this.list = adminUsers
         this.total = count
-      } catch ({ message = '获取组织机构列表出错' }) {
+      } catch ({ message = '获取管理员列表出错' }) {
         this.$message.error(message)
         this.listLoading = false
       }
     },
     async handleUpdate () {
       this.drawerFormVisible = false
+      this.formData.targetId = this.formData.organizationId || this.formData.branchId
+      this.formData.targetType = this.formData.role
       try {
         const params = {
-          organization: this.formData,
-          adminName: this.formData.adminName,
-          adminPassword: this.formData.adminPassword
+          adminUser: this.formData
         }
-        await Organizations.saveOrganizations(params)
-      } catch ({ message = '保存组织机构出错' }) {
+        await AdminUsers.saveAdminUsers(params)
+      } catch ({ message = '保存管理员出错' }) {
         this.getList()
         this.$message.error(message)
       } finally {

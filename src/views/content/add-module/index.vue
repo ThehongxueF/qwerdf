@@ -41,7 +41,7 @@
           @on-selection-change="multipleSelection=[...$event]"
           @field-search="fieldSearch"
         >
-          <template #action="{}">
+          <template #action="{ row }">
             <el-link icon="el-icon-view" @click="editLesson(row.id)">编辑</el-link>
           </template>
         </common-table>
@@ -106,7 +106,7 @@ import { Local } from '@/utils/storage'
 import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { tableColumns, moduleFormDesc } from './config'
 import { Departments, DynamicModels } from '@/api'
-const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/upload`
+const uploadUrl = `${process.env.VUE_APP_BASE_API}${process.env.VUE_APP_API_PREFIX}/media`
 const uploadHeaders = {
   'X-Token': Local.get('X-Token').value,
   'X-College-Domain': Local.get('X-College-Domain')

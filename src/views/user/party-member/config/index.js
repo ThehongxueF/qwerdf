@@ -46,7 +46,6 @@ export const modelMap = {
   mobile: '联系方式',
   memberType: '党员性质',
   birthday: '政治生日',
-  politicalDay: '入党时间',
   department: '所属支部',
   departmentId: '所属支部',
   // personalMessage: '个人寄语',
@@ -80,10 +79,6 @@ export const tableColumns = [
   {
     prop: 'memberType',
     label: modelMap['memberType']
-  },
-  {
-    prop: 'politicalDay',
-    label: modelMap['politicalDay']
   },
   {
     prop: 'department',
@@ -126,7 +121,6 @@ export const memberFormDesc = {
   mobile: {
     label: modelMap.mobile,
     type: 'input',
-    required: true,
     rules: [
       // eslint-disable-next-line prefer-regex-literals
       { pattern: new RegExp(/^[1][3|4|5|6|7|8|9][0-9]{9}$/, ''), trigger: 'change', message: '请输入正确的手机号码' }
@@ -135,9 +129,8 @@ export const memberFormDesc = {
   email: {
     label: modelMap.email,
     type: 'input',
-    required: true,
     rules: [
-      { max: 10, message: '邮箱不得超过30个字符', trigger: 'change' }
+      { max: 30, message: '邮箱不得超过30个字符', trigger: 'change' }
     ]
   },
   memberType: {
@@ -158,17 +151,6 @@ export const memberFormDesc = {
   birthday: {
     label: modelMap.birthday,
     type: 'date',
-    required: true,
-    attrs: {
-      placeholder: '请选择日期',
-      format: 'yyyy-MM-dd',
-      valueFormat: 'yyyy-MM-dd'
-    }
-  },
-  politicalDay: {
-    label: modelMap.politicalDay,
-    type: 'date',
-    required: true,
     attrs: {
       placeholder: '请选择日期',
       format: 'yyyy-MM-dd',
@@ -177,8 +159,7 @@ export const memberFormDesc = {
   },
   experience: {
     label: modelMap.experience,
-    type: 'textarea',
-    required: true
+    type: 'textarea'
   },
   departmentId: {
     label: modelMap.departmentId,
@@ -197,6 +178,7 @@ export const memberFormDesc = {
   avatar: {
     label: modelMap.avatar,
     type: 'image-uploader',
+    required: true,
     attrs: {
       ...imgUploadOptions,
       headers

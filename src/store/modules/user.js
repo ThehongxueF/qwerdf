@@ -30,6 +30,7 @@ const mutations = {
   },
   SET_USER_INFO: (state, data) => {
     state.userInfo = data
+    Vue.ls.set('UserInfo', data)
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
@@ -51,9 +52,9 @@ const actions = {
   // user login
   login ({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
-      Login.signIn(userInfo).then(({ token, admin_user }) => {
+      Login.signIn(userInfo).then(({ token, adminUser }) => {
         commit('SET_TOKEN', token)
-        commit('SET_USER_INFO', admin_user)
+        commit('SET_USER_INFO', adminUser)
         setToken(token)
         resolve()
       }).catch(error => {
@@ -61,7 +62,9 @@ const actions = {
       })
     })
   },
-
+  setInfo ({ commit }, userInfo) {
+    commit('SET_USER_INFO', userInfo)
+  },
   // get user info
   getInfo ({ commit, dispatch }) {
     commit('SET_ROLES', ['admin'])
