@@ -54,8 +54,8 @@
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page-no.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
@@ -108,9 +108,12 @@ export default {
     },
     async handleUpdate () {
       this.drawerFormVisible = false
+      this.formData.attachments = this.formData.attachments && this.formData.attachments.length > 0 && this.formData.attachments.map(item => item.link)
       try {
         const params = {
-          department: this.formData
+          department: this.formData,
+          adminName: this.formData.adminName,
+          adminPassword: this.formData.adminPassword
         }
         await Departments.saveDepartments(params)
       } catch ({ message = '新增支部出错' }) {

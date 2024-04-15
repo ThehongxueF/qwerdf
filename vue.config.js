@@ -6,7 +6,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '技术转移综合管理系统' // page title
+const name = defaultSettings.title || '党组织信息公示管理后台' // page title
 
 const port = process.env.port || process.env.npm_config_port || 8080 // dev port
 

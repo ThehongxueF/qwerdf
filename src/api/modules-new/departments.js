@@ -32,5 +32,14 @@ export default {
       url: `/departments/${id}`,
       method: 'get'
     })
+  },
+
+  // 更新用户排序
+  saveUserOrder (data) {
+    return request({
+      url: `/departments/${data.id}/user_order`,
+      method: 'put',
+      params: data
+    })
   }
 }

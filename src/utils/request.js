@@ -26,7 +26,7 @@ service.interceptors.request.use(
       config.data = toSnakecase(config.data)
     }
     if (config.params) {
-      config.data = toSnakecase(config.params)
+      config.params = toSnakecase(config.params)
     }
     // config.data = qs.stringify(config.data, { arrayFormat: 'comma' })
     return config
@@ -94,6 +94,13 @@ service2.interceptors.request.use(
     if (token) {
       config.headers[TOKEN_KEY] = token
     }
+    if (config.data) {
+      config.data = toSnakecase(config.data)
+    }
+    if (config.params) {
+      config.params = toSnakecase(config.params)
+    }
+    config.data = qs.stringify(config.data, { arrayFormat: 'comma' })
     return config
   },
   (error) => {

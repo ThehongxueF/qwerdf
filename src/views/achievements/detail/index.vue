@@ -154,8 +154,8 @@
             <pagination
               v-show="total>0"
               :total="total"
-              :page.sync="listQuery.page"
-              :limit.sync="listQuery.perPage"
+              :page-no.sync="listQuery.pageNo"
+              :limit.sync="listQuery.pageSize"
               @pagination="getList"
             />
           </div>
@@ -455,8 +455,8 @@ export default {
     },
     async searchBroker ({ text }, cb, roles) {
       const params = {
-        page: 1,
-        perPage: 1000,
+        pageNo: 1,
+        pageSize: 1000,
         text,
         disabled: 'false',
         role: roles.join(',')
@@ -486,8 +486,8 @@ export default {
     async searchUser ({ text }, cb, roles) {
       try {
         const params = {
-          page: 1,
-          perPage: 200,
+          pageNo: 1,
+          pageSize: 200,
           state: 'accepted',
           disabled: 'false',
           role: roles.join(',')
@@ -508,8 +508,8 @@ export default {
       try {
         const params = {
           text: text,
-          page: 1,
-          perPage: 10000,
+          pageNo: 1,
+          pageSize: 10000,
           state: 'accepted',
           disabled: 'false',
           roles: roles.join(','),

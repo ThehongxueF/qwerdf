@@ -99,8 +99,8 @@ export default {
     },
     async handleSearchBroker (text, roles, cb) {
       const params = {
-        page: 1,
-        perPage: 1000,
+        pageNo: 1,
+        pageSize: 1000,
         text,
         role: roles.join(',')
       }
@@ -129,8 +129,8 @@ export default {
     // 检索用户
     async handleSearch (text, roles, cb) {
       const params = {
-        page: 1,
-        perPage: 100,
+        pageNo: 1,
+        pageSize: 100,
         text,
         role: roles.join(',')
       }
@@ -146,8 +146,8 @@ export default {
       try {
         const params = {
           text: text,
-          page: 1,
-          perPage: 10000,
+          pageNo: 1,
+          pageSize: 10000,
           state: 'accepted',
           disabled: 'false',
           roles: roles.join(','),

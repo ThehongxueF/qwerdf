@@ -15,8 +15,8 @@
       v-show="total>0"
       :total="total"
       :background="false"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.perPage"
+      :page-no.sync="listQuery.pageNo"
+      :limit.sync="listQuery.pageSize"
       @pagination="getList"
     />
   </div>
@@ -34,8 +34,8 @@ export default {
   data () {
     return {
       listQuery: {
-        page: 1,
-        perPage: 50
+        pageNo: 1,
+        pageSize: 50
       }
     }
   },

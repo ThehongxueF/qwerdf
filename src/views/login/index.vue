@@ -13,7 +13,7 @@
           </div>
           <div class="image-content-name">
             <div>中国工程院院士专家成果转化中心</div>
-            <div style="color:#ff7800">技术转移综合管理系统</div>
+            <div style="color:#ff7800">党组织信息公示管理后台</div>
           </div>
         </div> -->
       </div>
@@ -21,7 +21,7 @@
         <div class="login-content" :class="{ 'login-content-mobile': tabsActiveName === 'mobile' }">
           <div class="login-content-main">
             <!-- <h5 v-if="collegeInfo" class="login-content-subtitle">{{ collegeInfo && collegeInfo.name.slice(0,14) }}</h5>
-            <h4 class="login-content-title">技术转移综合管理系统</h4> -->
+            <h4 class="login-content-title">党组织信息公示管理后台</h4> -->
             <h4 class="login-content-title">登录</h4>
             <el-tabs v-model="tabsActiveName" class="add-padding" stretch @tab-click="onTabsClick">
               <el-tab-pane v-if="showCode" label="验证码登录" name="mobile" :disabled="tabsActiveName === 'mobile'">

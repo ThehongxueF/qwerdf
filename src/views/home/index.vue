@@ -12,7 +12,7 @@ export default {
     if (userInfo.role === '超管') {
       next('/databoard')
     } else {
-      next('/admin-users')
+      next('/admin')
     }
   }
 }

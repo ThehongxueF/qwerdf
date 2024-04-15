@@ -100,6 +100,7 @@ export default {
   watch: {
     $route (to, from) {
       this.activeMenu = to.name
+      console.log('this.activeMenu', this.activeMenu)
     }
   },
   created () {

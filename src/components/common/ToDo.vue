@@ -29,18 +29,18 @@
           v-show="total>0"
           layout="prev, pager, next"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page-no.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
     </el-drawer>
-    <div ref="handleBtn" :class="[drawer ? 'unfold' : 'close', 'handle-btn']" @click="drawer = !drawer">
+    <!-- <div ref="handleBtn" :class="[drawer ? 'unfold' : 'close', 'handle-btn']" @click="drawer = !drawer">
       <div class="btn-content">
         <i :class="[drawer ? 'icon-down' : 'icon-up','el-icon-sort-up','icon']" />
         <span>待办事项</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -77,8 +77,8 @@ export default {
       targetTypeRouteMap,
       drawer: false,
       listQuery: {
-        page: 1,
-        perPage: 10
+        pageNo: 1,
+        pageSize: 10
       },
       list: [],
       total: 10,

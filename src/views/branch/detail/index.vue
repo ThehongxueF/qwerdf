@@ -49,16 +49,16 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/branch_active.png" alt="">
                   <div class="label" style="text-align:center;">党员人数</div>
-                  <div class="count"> 100</div>
+                  <div class="count"> {{ detail.partyMemberCount }}</div>
                 </div>
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <div class="label">发展党员人数</div>
-                  <div class="count"> 100</div>
+                  <div class="count"> {{ detail.protentialMemberCount }}</div>
                 </div>
-                <div class="flex-space-between" style="margin-left:50px; position:relative">
+                <!-- <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <div class="label">少数民族党员人数</div>
                   <div class="count">20</div>
-                </div>
+                </div> -->
               </el-card>
             </el-col>
             <el-col :span="12">
@@ -66,7 +66,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/branch_active.png" alt="">
                   <div class="label">主题党日</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.partyDayCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -77,7 +77,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/branch_active.png" alt="">
                   <div class="label">三会一课</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.conferenceCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -86,7 +86,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/branch_active.png" alt="">
                   <div class="label">公示公开</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.publicationCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -100,26 +100,31 @@
           <div class="flex-space-between">
             <h3>组织架构</h3>
             <el-button
+              v-if="users.length > 0"
               type="primary"
-              icon="el-icon-edit"
+              @click="saveOrder"
             >
-              编辑
+              保存
             </el-button>
           </div>
           <div>
             <el-card class="branch-card" shadow="hover">
-              <h3 style="text-align:center;">{{ '组织架构一' }}</h3>
+              <h3 style="text-align:center;">{{ department.name }}</h3>
             </el-card>
-            <div class="organization-card-list flex-space-between">
+            <div class="organization-card-list flex-space-between user-list">
               <draggable
-                v-model="organizationList"
+                v-model="users"
                 class="list-group"
                 tag="ul"
               >
                 <transition-group type="transition" :name="'flip-list'">
-                  <li v-for="(element) in organizationList" :key="element.id" class="list-group-item one-text-overflow">
+                  <li v-for="(element) in users" :key="element.id" class="list-group-item one-text-overflow">
                     <el-card class="branch-card" shadow="hover">
-                      <h3 style="text-align:center;">{{ element.name }}</h3>
+                      <div style="text-align:center;">{{ element.name }}</div>
+                      <div class="user-avatar" style="text-align: center;">
+                        <img class="user-avatar-img" :src="element.avatar" alt="">
+                      </div>
+
                     </el-card>
                   </li>
                 </transition-group>
@@ -186,7 +191,7 @@ import { branchFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
 import draggable from 'vuedraggable'
 import { carouselFormDesc } from '../config'
-import { Departments } from '@/api'
+import { Departments, Users } from '@/api'
 
 export default {
   components: { draggable },
@@ -199,6 +204,7 @@ export default {
       formData: {},
       carouselFormLoading: false,
       drawerFormVisible: false,
+      detail: {},
       branch: {
         title: '单位名称1',
         unit: {
@@ -233,7 +239,8 @@ export default {
           name: '组织架构七'
         }
       ],
-      department: {}
+      department: {},
+      users: []
     }
   },
   watch: {
@@ -245,19 +252,45 @@ export default {
       }
     }
   },
-  created () {
-    this.getDetail()
+  async created () {
+    await this.getDetail()
+    if (this.formData.attachments) {
+      this.formData.attachments = JSON.parse(this.formData.attachments).map(item => {
+        return {
+          link: item
+        }
+      })
+    }
+    this.formData.showPics = JSON.parse(this.formData.showPics)
+    await this.getUsersList()
   },
   methods: {
     async getDetail () {
       try {
-        const { department } = await Departments.getDepartment(this.id)
-        this.department = department
+        const data = await Departments.getDepartment(this.id)
+        this.detail = data
+        this.department = data.department
       } catch ({ message = '获取支部详情出错' }) {
         this.$message.error(message)
       }
     },
+    async getUsersList () {
+      try {
+        const { users, count } = await Users.getUsers({ pageNo: 1, pageSize: 10, departmentId: this.id })
+        if (users.length > 0) {
+          this.users = users.filter(item => item.memberType === 'true')
+        }
+        this.total = count
+      } catch ({ message = '获取党员列表出错' }) {
+        this.$message.error(message)
+      }
+    },
     async handleUpdate () {
+      console.log('this.formData', this.formData)
+      if (this.formData.attachments && this.formData.attachments.length > 0) {
+        this.formData.attachments = this.formData.attachments.map(item => item.link || item.name)
+      }
+      this.formData.showPics = this.formData.carousels
       const params = {
         department: this.formData
       }
@@ -269,10 +302,32 @@ export default {
         this.listLoading = false
       } finally {
         this.drawerFormVisible = false
+        if (this.formData.attachments) {
+          this.formData.attachments = JSON.parse(this.formData.attachments).map(item => {
+            return {
+              link: item
+            }
+          })
+        }
+        this.formData.showPics = JSON.parse(this.formData.showPics)
       }
     },
     async onCarouselSubmit (data) {
       await this.handleUpdate()
+    },
+    async saveOrder () {
+      const params = {
+        id: this.id,
+        userIds: this.users.map(item => item.id)
+      }
+      try {
+        await Departments.saveUserOrder(params)
+        this.$message.success('保存成功')
+      } catch ({ message = '保存党员顺序出错' }) {
+        this.$message.error(message)
+      } finally {
+        this.getUsersList()
+      }
     }
   }
 }
@@ -307,9 +362,14 @@ export default {
 }
 .branch-card {
   width: 150px;
-  height: 126px;
+  height: 130px;
   color: #75899F;
   margin: auto;
+}
+.user-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
 .organization-card-list {
     width: 540px;
@@ -326,10 +386,10 @@ export default {
   padding-left: 0;
 }
 .list-group-item {
-  padding: 20px 10px;
+  padding: 0px 10px 10px;
   margin: 5px;
   border-radius: 4px;
-  background: var(--color-bg);
+  // background: var(--color-bg);
   cursor: move;
   line-height: 40px;
   display: inline-flex;
@@ -344,6 +404,14 @@ export default {
   border-radius: 4px;
   width: 80px;
   height: 40px;
+}
+
+.user-list {
+  ::v-deep {
+    .el-card__body {
+      padding: 0px;
+    }
+  }
 }
 </style>
 

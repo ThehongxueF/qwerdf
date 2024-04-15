@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <el-row :gutter="10">
-      <h3>{{ '单位管理 ——— ' + organization.name }}?</h3>
       <el-col :lg="{ span: 24 }" :xl="{ span: 12 }" class="mb10">
         <el-card class="base-info" shadow="hover">
           <div class="header" style="position:relative">
@@ -55,16 +54,16 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/unit_active.png" alt="">
                   <div class="label" style="text-align:center;">党员人数</div>
-                  <div class="count"> 100</div>
+                  <div class="count"> {{ detail.partyMemberCount }}</div>
                 </div>
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <div class="label">发展党员人数</div>
-                  <div class="count"> 100</div>
+                  <div class="count"> {{ detail.protentialMemberCount }}</div>
                 </div>
-                <div class="flex-space-between" style="margin-left:50px; position:relative">
+                <!-- <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <div class="label">少数民族党员人数</div>
                   <div class="count">20</div>
-                </div>
+                </div> -->
               </el-card>
             </el-col>
             <el-col :span="12">
@@ -72,7 +71,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/unit_active.png" alt="">
                   <div class="label">主题党日</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.partyDayCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -83,7 +82,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/unit_active.png" alt="">
                   <div class="label">三会一课</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.conferenceCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -92,7 +91,7 @@
                 <div class="flex-space-between" style="margin-left:50px; position:relative">
                   <img class="label-icon" src="@/assets/icons/unit_active.png" alt="">
                   <div class="label">公示公开</div>
-                  <div class="count">50</div>
+                  <div class="count">{{ detail.publicationCount }}</div>
                 </div>
               </el-card>
             </el-col>
@@ -114,8 +113,11 @@
             </el-button>
           </div>
           <div style="display:flex; overflow-x:auto;">
-            <el-card v-for="item in branchList" :key="item.id" class="branch-card" shadow="hover" style="margin-top: 20px; height:150px">
-              <h3 style="text-align:center;">{{ item.name }}</h3>
+            <el-card v-for="item in departments" :key="item.id" class="branch-card" shadow="hover" style="margin-top: 20px; height:120px">
+              <div style="height: 120px" @click="goDepartmentDetail(item)">
+                <h3 class="unit-name" style="text-align:center;">{{ item.name }}</h3>
+              </div>
+
             </el-card>
           </div>
         </el-card>
@@ -137,7 +139,7 @@
       :drawer-attrs="drawerAttrs"
       :form-desc="branchFormDesc"
       :visible.sync="branchDrawerFormVisible"
-      title="编辑单位"
+      title="新增支部"
       size="800px"
       :request-fn="handleUpdateBranch"
     />
@@ -146,45 +148,18 @@
 <script>
 import { cloneDeep } from 'lodash'
 import { unitFormDesc, branchFormDesc } from '../config'
-import { updateMixin, detailMixin } from '@/mixins'
+import { listMixin, updateMixin, detailMixin } from '@/mixins'
 import { Organizations, Departments } from '@/api'
 export default {
-  mixins: [updateMixin, detailMixin],
+  mixins: [listMixin, updateMixin, detailMixin],
   data () {
     return {
       unitFormDesc,
       branchFormDesc,
       drawerFormVisible: false,
       branchDrawerFormVisible: false,
-      unit: {
-        title: '单位名称1',
-        address: '上海市浦东新区',
-        contact: '联系人1111',
-        mobile: '15563241566',
-        endTime: '2023-10-20'
-      },
-      branchList: [
-        {
-          id: 1,
-          name: '支部一'
-        },
-        {
-          id: 2,
-          name: '支部二'
-        },
-        {
-          id: 3,
-          name: '支部三'
-        },
-        {
-          id: 4,
-          name: '支部四'
-        },
-        {
-          id: 5,
-          name: '支部五'
-        }
-      ],
+      detail: {},
+      departments: [],
       organization: {},
       branchFormData: {},
       value: true
@@ -200,14 +175,25 @@ export default {
   },
   created () {
     this.getDetail()
+    this.getDepartmentsList()
   },
   methods: {
     async getDetail () {
       try {
-        const { organization } = await Organizations.getOrganization(this.id)
-        this.organization = organization
+        const data = await Organizations.getOrganization(this.id)
+        this.detail = data
+        this.organization = data.organization
       } catch ({ message = '获取组织机构详情出错' }) {
         this.$message.error(message)
+      }
+    },
+    async getDepartmentsList () {
+      try {
+        const { departments } = await Departments.getDepartments({ ...this.listQuery, organizationId: String(this.id) })
+        this.departments = departments
+      } catch ({ message = '获取支部列表出错' }) {
+        this.$message.error(message)
+        this.listLoading = false
       }
     },
     async  handleUpdate () {
@@ -228,9 +214,13 @@ export default {
       try {
         this.branchFormData.organizationId = this.id
         const params = {
-          department: this.branchFormData
+          department: this.branchFormData,
+          adminName: this.formData.adminName,
+          adminPassword: this.formData.adminPassword
         }
         await Departments.saveDepartments(params)
+        this.getDepartmentsList()
+        this.$message.success('新增支部成功')
       } catch ({ message = '新增支部出错' }) {
         this.$message.error(message)
       } finally {
@@ -239,6 +229,9 @@ export default {
     },
     addBranch () {
       this.branchDrawerFormVisible = true
+    },
+    goDepartmentDetail (item) {
+      this.$router.push({ name: 'Branchs.Detail', params: { id: item.id }})
     }
   }
 }
@@ -299,6 +292,10 @@ export default {
   height: 126px;
   color: #75899F;
   margin: 5px;
+  cursor: pointer;
+  .unit-name {
+    font-size: 16px;
+  }
 }
 </style>
 

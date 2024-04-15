@@ -24,26 +24,28 @@ const commonColumns = [
 
 export const modelMap = {
   id: 'id',
-  name: '单位名称',
+  name: '机构名称',
   contact: '联系人',
   description: '描述',
   avatar: '头像',
   mobile: '联系方式',
   branchCount: '支部数量',
   servedAt: '开通时间',
-  address: '单位地址',
-  adminName: '单位账号',
-  adminPassword: '单位密码',
+  address: '机构地址',
+  adminName: '机构管理员账号',
+  adminPassword: '机构管理员密码',
   createdAt: '创建时间'
 }
 
 export const branchMap = {
   id: 'id',
   name: '支部名称',
-  organization: '所属单位',
-  organizationId: '所属单位',
+  organization: '所属机构',
+  organizationId: '所属机构',
   introduction: '支部介绍',
   attachmentIds: '相关文件',
+  adminName: '支部管理员账号',
+  adminPassword: '支部管理员密码',
   logo: '头像'
 }
 
@@ -90,7 +92,7 @@ export const unitFormDesc = {
     type: 'input',
     required: true,
     rules: [
-      { max: 50, message: '单位名称不得超过50个字符', trigger: 'change' }
+      { max: 50, message: '机构名称不得超过50个字符', trigger: 'change' }
     ]
   },
   description: {
@@ -111,7 +113,7 @@ export const unitFormDesc = {
   //   type: 'input',
   //   required: true,
   //   rules: [
-  //     { max: 50, message: '单位地址不得超过50个字符', trigger: 'change' }
+  //     { max: 50, message: '机构地址不得超过50个字符', trigger: 'change' }
   //   ]
   // },
   // contact: {
@@ -142,7 +144,6 @@ export const unitFormDesc = {
   adminName: {
     label: modelMap.adminName,
     type: 'input',
-    required: true,
     rules: [
       { max: 20, message: '账号不得超过20个字符', trigger: 'change' }
     ]
@@ -150,7 +151,6 @@ export const unitFormDesc = {
   adminPassword: {
     label: modelMap.adminPassword,
     type: 'password',
-    required: true,
     rules: [
       { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
     ]
@@ -170,6 +170,20 @@ export const branchFormDesc = {
     label: branchMap.introduction,
     type: 'textarea',
     required: true
+  },
+  adminName: {
+    label: branchMap.adminName,
+    type: 'input',
+    rules: [
+      { max: 20, message: '账号不得超过20个字符', trigger: 'change' }
+    ]
+  },
+  adminPassword: {
+    label: branchMap.adminPassword,
+    type: 'password',
+    rules: [
+      { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
+    ]
   },
   logo: {
     label: branchMap.logo,

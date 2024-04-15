@@ -43,7 +43,7 @@
       v-model="formData"
       :span="24"
       :drawer-attrs="drawerAttrs"
-      :form-desc="memberFormDesc"
+      :form-desc="updateMemberFormDesc"
       :visible.sync="drawerFormVisible"
       title="编辑管理员"
       size="800px"
@@ -54,14 +54,14 @@
 <script>
 import { cloneDeep } from 'lodash'
 import _ from 'lodash'
-import { memberFormDesc } from '../config'
+import { updateMemberFormDesc } from '../config'
 import { updateMixin, detailMixin } from '@/mixins'
 import { AdminUsers } from '@/api'
 export default {
   mixins: [updateMixin, detailMixin],
   data () {
     return {
-      memberFormDesc,
+      updateMemberFormDesc,
       drawerFormVisible: false,
       adminUser: {}
     }
@@ -76,18 +76,17 @@ export default {
       deep: true,
       handler (data) {
         this.formData = cloneDeep(data)
-        // this.formData.organizationId = data.target && data.target.id
-        // this.formData.branchId = data.target && data.target.id
+        this.targetId = this.adminUser.target && this.adminUser.target.id
+        if (this.adminUser.role === '机构') {
+          this.formData.organizationId = this.adminUser.target && this.adminUser.target.id
+        } else {
+          this.formData.branchId = this.adminUser.target && this.adminUser.target.id
+        }
       }
     }
   },
-  created () {
-    this.getDetail()
-    if (this.adminUser.role === '机构') {
-      this.formData.organizationId = this.adminUser.target && this.adminUser.target.id
-    } else {
-      this.formData.branchId = this.adminUser.target && this.adminUser.target.id
-    }
+  async created () {
+    await this.getDetail()
   },
   methods: {
     async getDetail () {
@@ -100,7 +99,7 @@ export default {
     },
     async handleUpdate () {
       this.formData.targetId = this.formData.organizationId || this.formData.branchId
-      this.formData.targetType = this.formData.role
+      this.formData.targetType = this.formData.role === '机构' ? 'Organization' : 'Department'
       delete this.formData.branchId
       delete this.formData.organizationId
       console.log('this.formData', this.formData)

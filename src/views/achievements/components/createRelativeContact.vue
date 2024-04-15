@@ -188,8 +188,8 @@ export default {
     },
     async searchEnterprise (name) {
       const params = {
-        page: 1,
-        perPage: 100,
+        pageNo: 1,
+        pageSize: 100,
         name: name
       }
       try {
@@ -202,8 +202,8 @@ export default {
     async searchResourceContacts (name) {
       try {
         const params = {
-          page: 1,
-          perPage: 20,
+          pageNo: 1,
+          pageSize: 20,
           enterpriseName: this.form.enterpriseName,
           name: name
         }

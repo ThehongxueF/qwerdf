@@ -41,14 +41,14 @@
         @on-selection-change="multipleSelection=[...$event]"
         @field-search="fieldSearch"
       >
-        <template #memberType="{ }">
-          {{ '管理员' }}
+        <template #targetType="{ row }">
+          {{ row.targetType === 'Organization' ? '机构': '支部' }}
         </template>
-        <template #department="{ row }">
-          {{ row.department && row.department.name }}
+        <template #targetId="{ row }">
+          {{ row.target && row.target.name }}
         </template>
         <template #action="{ row }">
-          <router-link :to="{ name: 'AdminUsers.Detail' , params: { id: row.id } }">
+          <router-link :to="{ name: 'Admins.Detail' , params: { id: row.id } }">
             <el-link icon="el-icon-view">查看</el-link>
           </router-link>
         </template>
@@ -57,7 +57,7 @@
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.pageNo"
+          :page-no.sync="listQuery.pageNo"
           :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
@@ -112,7 +112,7 @@ export default {
     async handleUpdate () {
       this.drawerFormVisible = false
       this.formData.targetId = this.formData.organizationId || this.formData.branchId
-      this.formData.targetType = this.formData.role
+      this.formData.targetType = this.formData.role === '机构' ? 'Organization' : 'Department'
       try {
         const params = {
           adminUser: this.formData

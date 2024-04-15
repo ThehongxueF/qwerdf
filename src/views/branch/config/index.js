@@ -42,6 +42,8 @@ export const modelMap = {
   organizationId: '所属单位',
   introduction: '支部介绍',
   attachmentIds: '相关文件',
+  adminName: '支部管理员账号',
+  adminPassword: '支部管理员密码',
   logo: '头像'
 }
 
@@ -83,6 +85,20 @@ export const branchFormDesc = {
     }
 
   },
+  adminName: {
+    label: modelMap.adminName,
+    type: 'input',
+    rules: [
+      { max: 20, message: '账号不得超过20个字符', trigger: 'change' }
+    ]
+  },
+  adminPassword: {
+    label: modelMap.adminPassword,
+    type: 'password',
+    rules: [
+      { max: 20, message: '密码不得超过20个字符', trigger: 'change' }
+    ]
+  },
   introduction: {
     label: modelMap.introduction,
     type: 'textarea',
@@ -96,7 +112,7 @@ export const branchFormDesc = {
       headers
     }
   },
-  attachmentIds: {
+  attachments: {
     label: modelMap.attachmentIds,
     type: 'upload-file',
     valueFormatter (files) {

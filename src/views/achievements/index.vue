@@ -240,8 +240,8 @@
         <pagination
           v-show="total>0"
           :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.perPage"
+          :page-no.sync="listQuery.pageNo"
+          :limit.sync="listQuery.pageSize"
           @pagination="getList"
         />
       </div>
@@ -349,8 +349,8 @@ export default {
     // 检索用户
     async handleSearch (text, roles, cb) {
       const params = {
-        page: 1,
-        perPage: 10000,
+        pageNo: 1,
+        pageSize: 10000,
         text,
         state: 'accepted',
         disabled: 'false',
@@ -367,8 +367,8 @@ export default {
     },
     async handleSearchBroker (text, roles, cb) {
       const params = {
-        page: 1,
-        perPage: 10000,
+        pageNo: 1,
+        pageSize: 10000,
         text,
         disabled: 'false',
         role: roles.join(',')

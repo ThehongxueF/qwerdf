@@ -12,17 +12,17 @@ export default {
   },
 
   //  新增/更新公示公开
-  savePublications (publication) {
-    return (publication.id
+  savePublications (data) {
+    return (data.publication.id
       ? request({
-        url: `/publications/${publication.id}`,
+        url: `/publications/${data.publication.id}`,
         method: 'put',
-        data: publication
+        data: data
       })
       : request({
         url: '/publications',
         method: 'post',
-        data: publication
+        data: data
       }))
   },
 

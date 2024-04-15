@@ -45,8 +45,8 @@ export default {
       if (this.showNotifications) {
         try {
           const params = {
-            page: 1,
-            perPage: 1000,
+            pageNo: 1,
+            pageSize: 1000,
             dateFrom: this.dateFrom,
             dateTo: formatDate(new Date(), 'YYYY-mm-dd HH:MM:SS')
           }

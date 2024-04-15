@@ -1,5 +1,5 @@
 module.exports = {
-  title: '技术转移综合管理系统',
+  title: '党组织信息公示管理后台',
 
   /**
    * @type {boolean} true | false

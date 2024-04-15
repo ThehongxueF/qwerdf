@@ -44,22 +44,22 @@ export default {
         this.columns = this.originColumns && this.originColumns.filter(item => val.includes(item.prop))
       }
     },
-    'listQuery.page': {
+    'listQuery.pageNo': {
       handler (val) {
         const query = this.$route.query
         this.$router.replace({
-          query: { ...query, page: val }
+          query: { ...query, pageNo: val }
         })
       }
     }
   },
   created () {
     const query = this.$route.query
-    const { page } = query
-    if (page) {
-      this.listQuery.page = parseInt(page)
+    const { pageNo } = query
+    if (pageNo) {
+      this.listQuery.pageNo = parseInt(pageNo)
       this.$router.replace({
-        query: { ...query, page }
+        query: { ...query, pageNo }
       })
     }
     this.showColumns = this.originColumns && this.originColumns.filter(item => !item.hidden).map(item => item.prop)
@@ -71,18 +71,18 @@ export default {
       this.$router.replace({
         query: { }
       })
-      this.listQuery.page = 1
+      this.listQuery.pageNo = 1
       this.fieldQuery = {}
       this.getList()
     },
     fieldSearch (query) {
       this.fieldQuery = { ...query }
-      this.listQuery.page = 1
+      this.listQuery.pageNo = 1
       this.getList()
     },
     async handleFieldSearch () {
       this.fieldLoading = true
-      this.listQuery.page = 1
+      this.listQuery.pageNo = 1
       try {
         await this.getList()
       } finally {
@@ -90,7 +90,7 @@ export default {
       }
     },
     async handleSearch (query = {}) {
-      this.listQuery.page = 1
+      this.listQuery.pageNo = 1
       this.listQuery = { ...this.listQuery, ...query }
       await this.getList()
     },

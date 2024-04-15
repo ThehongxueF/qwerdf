@@ -188,7 +188,7 @@ export const achievementFormDesc = {
       value: 'id'
     },
     options: async data => {
-      const list = await fetchTemplates({ page: 1, perPage: 100, targetType: 'achievement' })
+      const list = await fetchTemplates({ pageNo: 1, pageSize: 100, targetType: 'achievement' })
       // 过滤出不为空的审核模板
       const enList = list.filter(item => item.enable !== false)
       return enList
@@ -203,7 +203,7 @@ export const achievementFormDesc = {
         'value-key': 'id',
         async remoteMethod (query, callback) {
           if (!isString(query)) callback([])
-          const params = { text: query, page: 1, perPage: 100, targetType: 'achievement' }
+          const params = { text: query, pageNo: 1, pageSize: 100, targetType: 'achievement' }
           const res = await fetchTemplates(params)
           // 过滤出不为空的审核模板
           const list = res.filter(item => item.enable !== false)
@@ -362,7 +362,7 @@ export const achievementUpdateFormDesc = {
       value: 'id'
     },
     options: async data => {
-      const list = await fetchTemplates({ page: 1, perPage: 100, targetType: 'achievement' })
+      const list = await fetchTemplates({ pageNo: 1, pageSize: 100, targetType: 'achievement' })
       return list
     },
     attrs (data) {
@@ -375,7 +375,7 @@ export const achievementUpdateFormDesc = {
         'value-key': 'id',
         async remoteMethod (query, callback) {
           if (!isString(query)) callback([])
-          const params = { text: query, page: 1, perPage: 100, targetType: 'achievement' }
+          const params = { text: query, pageNo: 1, pageSize: 100, targetType: 'achievement' }
           const res = await fetchTemplates(params)
           callback(res)
         }
